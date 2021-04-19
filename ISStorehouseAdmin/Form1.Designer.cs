@@ -50,8 +50,8 @@ namespace ISStorehouseAdmin
             this.ClearModulBtn = new System.Windows.Forms.Button();
             this.ModulCmb = new System.Windows.Forms.ComboBox();
             this.DiagModulBtn = new System.Windows.Forms.Label();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
-            this.comboBox2 = new System.Windows.Forms.ComboBox();
+            this.FromScanCmb = new System.Windows.Forms.ComboBox();
+            this.ToScanCmb = new System.Windows.Forms.ComboBox();
             this.FranLbl = new System.Windows.Forms.Label();
             this.ToLbl = new System.Windows.Forms.Label();
             this.FirstScanBtn = new System.Windows.Forms.Button();
@@ -62,17 +62,17 @@ namespace ISStorehouseAdmin
             this.RowId = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.CollumnId = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.PrefixId = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.comboBox3 = new System.Windows.Forms.ComboBox();
-            this.comboBox4 = new System.Windows.Forms.ComboBox();
-            this.comboBox5 = new System.Windows.Forms.ComboBox();
-            this.comboBox6 = new System.Windows.Forms.ComboBox();
-            this.comboBox7 = new System.Windows.Forms.ComboBox();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.textBox2 = new System.Windows.Forms.TextBox();
-            this.textBox3 = new System.Windows.Forms.TextBox();
-            this.comboBox8 = new System.Windows.Forms.ComboBox();
-            this.comboBox9 = new System.Windows.Forms.ComboBox();
-            this.comboBox10 = new System.Windows.Forms.ComboBox();
+            this.ModulSendSingleCmb = new System.Windows.Forms.ComboBox();
+            this.RowSendSingleCmb = new System.Windows.Forms.ComboBox();
+            this.Color2SendSingleCmb = new System.Windows.Forms.ComboBox();
+            this.EffectSendSingleCmb = new System.Windows.Forms.ComboBox();
+            this.Color0SendSingleCmb = new System.Windows.Forms.ComboBox();
+            this.LedsPerRowSendSingle = new System.Windows.Forms.TextBox();
+            this.LedSendSingleTxt = new System.Windows.Forms.TextBox();
+            this.PhysAddressTxt = new System.Windows.Forms.TextBox();
+            this.ModulCellInfoCmb = new System.Windows.Forms.ComboBox();
+            this.RowCellInfoCmb = new System.Windows.Forms.ComboBox();
+            this.CellCellInfoCmb = new System.Windows.Forms.ComboBox();
             this.ModulSendLbl = new System.Windows.Forms.Label();
             this.RowSendLbl = new System.Windows.Forms.Label();
             this.LedSendLbl = new System.Windows.Forms.Label();
@@ -80,7 +80,7 @@ namespace ISStorehouseAdmin
             this.EffectSendLbl = new System.Windows.Forms.Label();
             this.Color2SendLbl = new System.Windows.Forms.Label();
             this.LedsPerRowSendLbl = new System.Windows.Forms.Label();
-            this.label8 = new System.Windows.Forms.Label();
+            this.PhysAddressLbl = new System.Windows.Forms.Label();
             this.ModulCellInfoLbl = new System.Windows.Forms.Label();
             this.RowCellInfoLbl = new System.Windows.Forms.Label();
             this.CellCellInfoLbl = new System.Windows.Forms.Label();
@@ -167,6 +167,7 @@ namespace ISStorehouseAdmin
             this.OpenBtn.TabIndex = 0;
             this.OpenBtn.Text = "Open";
             this.OpenBtn.UseVisualStyleBackColor = true;
+            this.OpenBtn.Click += new System.EventHandler(this.OpenBtn_Click);
             // 
             // PortCmb
             // 
@@ -214,8 +215,8 @@ namespace ISStorehouseAdmin
             this.ScanGroup.Controls.Add(this.FirstScanBtn);
             this.ScanGroup.Controls.Add(this.ToLbl);
             this.ScanGroup.Controls.Add(this.FranLbl);
-            this.ScanGroup.Controls.Add(this.comboBox2);
-            this.ScanGroup.Controls.Add(this.comboBox1);
+            this.ScanGroup.Controls.Add(this.ToScanCmb);
+            this.ScanGroup.Controls.Add(this.FromScanCmb);
             this.ScanGroup.Controls.Add(this.GenerateGroup);
             this.ScanGroup.Location = new System.Drawing.Point(23, 237);
             this.ScanGroup.Name = "ScanGroup";
@@ -248,7 +249,7 @@ namespace ISStorehouseAdmin
             // SendSingleGroup
             // 
             this.SendSingleGroup.Controls.Add(this.SendSingleBtn);
-            this.SendSingleGroup.Controls.Add(this.label8);
+            this.SendSingleGroup.Controls.Add(this.PhysAddressLbl);
             this.SendSingleGroup.Controls.Add(this.LedsPerRowSendLbl);
             this.SendSingleGroup.Controls.Add(this.Color2SendLbl);
             this.SendSingleGroup.Controls.Add(this.EffectSendLbl);
@@ -256,14 +257,14 @@ namespace ISStorehouseAdmin
             this.SendSingleGroup.Controls.Add(this.LedSendLbl);
             this.SendSingleGroup.Controls.Add(this.RowSendLbl);
             this.SendSingleGroup.Controls.Add(this.ModulSendLbl);
-            this.SendSingleGroup.Controls.Add(this.textBox3);
-            this.SendSingleGroup.Controls.Add(this.textBox2);
-            this.SendSingleGroup.Controls.Add(this.textBox1);
-            this.SendSingleGroup.Controls.Add(this.comboBox7);
-            this.SendSingleGroup.Controls.Add(this.comboBox6);
-            this.SendSingleGroup.Controls.Add(this.comboBox5);
-            this.SendSingleGroup.Controls.Add(this.comboBox4);
-            this.SendSingleGroup.Controls.Add(this.comboBox3);
+            this.SendSingleGroup.Controls.Add(this.PhysAddressTxt);
+            this.SendSingleGroup.Controls.Add(this.LedSendSingleTxt);
+            this.SendSingleGroup.Controls.Add(this.LedsPerRowSendSingle);
+            this.SendSingleGroup.Controls.Add(this.Color0SendSingleCmb);
+            this.SendSingleGroup.Controls.Add(this.EffectSendSingleCmb);
+            this.SendSingleGroup.Controls.Add(this.Color2SendSingleCmb);
+            this.SendSingleGroup.Controls.Add(this.RowSendSingleCmb);
+            this.SendSingleGroup.Controls.Add(this.ModulSendSingleCmb);
             this.SendSingleGroup.Location = new System.Drawing.Point(18, 25);
             this.SendSingleGroup.Name = "SendSingleGroup";
             this.SendSingleGroup.Size = new System.Drawing.Size(325, 278);
@@ -277,9 +278,9 @@ namespace ISStorehouseAdmin
             this.CellInfoGroup.Controls.Add(this.CellCellInfoLbl);
             this.CellInfoGroup.Controls.Add(this.RowCellInfoLbl);
             this.CellInfoGroup.Controls.Add(this.ModulCellInfoLbl);
-            this.CellInfoGroup.Controls.Add(this.comboBox10);
-            this.CellInfoGroup.Controls.Add(this.comboBox9);
-            this.CellInfoGroup.Controls.Add(this.comboBox8);
+            this.CellInfoGroup.Controls.Add(this.CellCellInfoCmb);
+            this.CellInfoGroup.Controls.Add(this.RowCellInfoCmb);
+            this.CellInfoGroup.Controls.Add(this.ModulCellInfoCmb);
             this.CellInfoGroup.Location = new System.Drawing.Point(377, 48);
             this.CellInfoGroup.Name = "CellInfoGroup";
             this.CellInfoGroup.Size = new System.Drawing.Size(172, 180);
@@ -295,6 +296,7 @@ namespace ISStorehouseAdmin
             this.DiagnoseBtn.TabIndex = 1;
             this.DiagnoseBtn.Text = "Diagnose";
             this.DiagnoseBtn.UseVisualStyleBackColor = true;
+            this.DiagnoseBtn.Click += new System.EventHandler(this.DiagnoseBtn_Click);
             // 
             // ClearAllBtn
             // 
@@ -304,6 +306,7 @@ namespace ISStorehouseAdmin
             this.ClearAllBtn.TabIndex = 2;
             this.ClearAllBtn.Text = "Clear All";
             this.ClearAllBtn.UseVisualStyleBackColor = true;
+            this.ClearAllBtn.Click += new System.EventHandler(this.ClearAllBtn_Click);
             // 
             // DiagnoseModulBtn
             // 
@@ -313,6 +316,7 @@ namespace ISStorehouseAdmin
             this.DiagnoseModulBtn.TabIndex = 0;
             this.DiagnoseModulBtn.Text = "Diagnose Modul";
             this.DiagnoseModulBtn.UseVisualStyleBackColor = true;
+            this.DiagnoseModulBtn.Click += new System.EventHandler(this.DiagnoseModulBtn_Click);
             // 
             // ClearModulBtn
             // 
@@ -322,6 +326,7 @@ namespace ISStorehouseAdmin
             this.ClearModulBtn.TabIndex = 1;
             this.ClearModulBtn.Text = "Clear Modul";
             this.ClearModulBtn.UseVisualStyleBackColor = true;
+            this.ClearModulBtn.Click += new System.EventHandler(this.ClearModulBtn_Click);
             // 
             // ModulCmb
             // 
@@ -341,21 +346,21 @@ namespace ISStorehouseAdmin
             this.DiagModulBtn.Text = "Modul";
             this.DiagModulBtn.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
-            // comboBox1
+            // FromScanCmb
             // 
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(6, 33);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(74, 21);
-            this.comboBox1.TabIndex = 1;
+            this.FromScanCmb.FormattingEnabled = true;
+            this.FromScanCmb.Location = new System.Drawing.Point(6, 33);
+            this.FromScanCmb.Name = "FromScanCmb";
+            this.FromScanCmb.Size = new System.Drawing.Size(74, 21);
+            this.FromScanCmb.TabIndex = 1;
             // 
-            // comboBox2
+            // ToScanCmb
             // 
-            this.comboBox2.FormattingEnabled = true;
-            this.comboBox2.Location = new System.Drawing.Point(86, 33);
-            this.comboBox2.Name = "comboBox2";
-            this.comboBox2.Size = new System.Drawing.Size(74, 21);
-            this.comboBox2.TabIndex = 2;
+            this.ToScanCmb.FormattingEnabled = true;
+            this.ToScanCmb.Location = new System.Drawing.Point(86, 33);
+            this.ToScanCmb.Name = "ToScanCmb";
+            this.ToScanCmb.Size = new System.Drawing.Size(74, 21);
+            this.ToScanCmb.TabIndex = 2;
             // 
             // FranLbl
             // 
@@ -383,6 +388,7 @@ namespace ISStorehouseAdmin
             this.FirstScanBtn.TabIndex = 5;
             this.FirstScanBtn.Text = "Frist Scan";
             this.FirstScanBtn.UseVisualStyleBackColor = true;
+            this.FirstScanBtn.Click += new System.EventHandler(this.FirstScanBtn_Click);
             // 
             // AddPrefixBtn
             // 
@@ -392,6 +398,7 @@ namespace ISStorehouseAdmin
             this.AddPrefixBtn.TabIndex = 0;
             this.AddPrefixBtn.Text = "Add Prefix";
             this.AddPrefixBtn.UseVisualStyleBackColor = true;
+            this.AddPrefixBtn.Click += new System.EventHandler(this.AddPrefixBtn_Click);
             // 
             // GenerateBtn
             // 
@@ -401,6 +408,7 @@ namespace ISStorehouseAdmin
             this.GenerateBtn.TabIndex = 1;
             this.GenerateBtn.Text = "Generate";
             this.GenerateBtn.UseVisualStyleBackColor = true;
+            this.GenerateBtn.Click += new System.EventHandler(this.GenerateBtn_Click);
             // 
             // dataGridView1
             // 
@@ -437,90 +445,90 @@ namespace ISStorehouseAdmin
             this.PrefixId.HeaderText = "Prefix";
             this.PrefixId.Name = "PrefixId";
             // 
-            // comboBox3
+            // ModulSendSingleCmb
             // 
-            this.comboBox3.FormattingEnabled = true;
-            this.comboBox3.Location = new System.Drawing.Point(7, 23);
-            this.comboBox3.Name = "comboBox3";
-            this.comboBox3.Size = new System.Drawing.Size(51, 21);
-            this.comboBox3.TabIndex = 0;
+            this.ModulSendSingleCmb.FormattingEnabled = true;
+            this.ModulSendSingleCmb.Location = new System.Drawing.Point(7, 23);
+            this.ModulSendSingleCmb.Name = "ModulSendSingleCmb";
+            this.ModulSendSingleCmb.Size = new System.Drawing.Size(51, 21);
+            this.ModulSendSingleCmb.TabIndex = 0;
             // 
-            // comboBox4
+            // RowSendSingleCmb
             // 
-            this.comboBox4.FormattingEnabled = true;
-            this.comboBox4.Location = new System.Drawing.Point(7, 50);
-            this.comboBox4.Name = "comboBox4";
-            this.comboBox4.Size = new System.Drawing.Size(51, 21);
-            this.comboBox4.TabIndex = 1;
+            this.RowSendSingleCmb.FormattingEnabled = true;
+            this.RowSendSingleCmb.Location = new System.Drawing.Point(7, 50);
+            this.RowSendSingleCmb.Name = "RowSendSingleCmb";
+            this.RowSendSingleCmb.Size = new System.Drawing.Size(51, 21);
+            this.RowSendSingleCmb.TabIndex = 1;
             // 
-            // comboBox5
+            // Color2SendSingleCmb
             // 
-            this.comboBox5.FormattingEnabled = true;
-            this.comboBox5.Location = new System.Drawing.Point(7, 156);
-            this.comboBox5.Name = "comboBox5";
-            this.comboBox5.Size = new System.Drawing.Size(51, 21);
-            this.comboBox5.TabIndex = 2;
+            this.Color2SendSingleCmb.FormattingEnabled = true;
+            this.Color2SendSingleCmb.Location = new System.Drawing.Point(7, 156);
+            this.Color2SendSingleCmb.Name = "Color2SendSingleCmb";
+            this.Color2SendSingleCmb.Size = new System.Drawing.Size(51, 21);
+            this.Color2SendSingleCmb.TabIndex = 2;
             // 
-            // comboBox6
+            // EffectSendSingleCmb
             // 
-            this.comboBox6.FormattingEnabled = true;
-            this.comboBox6.Location = new System.Drawing.Point(7, 129);
-            this.comboBox6.Name = "comboBox6";
-            this.comboBox6.Size = new System.Drawing.Size(51, 21);
-            this.comboBox6.TabIndex = 3;
+            this.EffectSendSingleCmb.FormattingEnabled = true;
+            this.EffectSendSingleCmb.Location = new System.Drawing.Point(7, 129);
+            this.EffectSendSingleCmb.Name = "EffectSendSingleCmb";
+            this.EffectSendSingleCmb.Size = new System.Drawing.Size(51, 21);
+            this.EffectSendSingleCmb.TabIndex = 3;
             // 
-            // comboBox7
+            // Color0SendSingleCmb
             // 
-            this.comboBox7.FormattingEnabled = true;
-            this.comboBox7.Location = new System.Drawing.Point(7, 103);
-            this.comboBox7.Name = "comboBox7";
-            this.comboBox7.Size = new System.Drawing.Size(51, 21);
-            this.comboBox7.TabIndex = 4;
+            this.Color0SendSingleCmb.FormattingEnabled = true;
+            this.Color0SendSingleCmb.Location = new System.Drawing.Point(7, 103);
+            this.Color0SendSingleCmb.Name = "Color0SendSingleCmb";
+            this.Color0SendSingleCmb.Size = new System.Drawing.Size(51, 21);
+            this.Color0SendSingleCmb.TabIndex = 4;
             // 
-            // textBox1
+            // LedsPerRowSendSingle
             // 
-            this.textBox1.Location = new System.Drawing.Point(7, 183);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(51, 20);
-            this.textBox1.TabIndex = 5;
+            this.LedsPerRowSendSingle.Location = new System.Drawing.Point(7, 183);
+            this.LedsPerRowSendSingle.Name = "LedsPerRowSendSingle";
+            this.LedsPerRowSendSingle.Size = new System.Drawing.Size(51, 20);
+            this.LedsPerRowSendSingle.TabIndex = 5;
             // 
-            // textBox2
+            // LedSendSingleTxt
             // 
-            this.textBox2.Location = new System.Drawing.Point(7, 77);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(51, 20);
-            this.textBox2.TabIndex = 6;
+            this.LedSendSingleTxt.Location = new System.Drawing.Point(7, 77);
+            this.LedSendSingleTxt.Name = "LedSendSingleTxt";
+            this.LedSendSingleTxt.Size = new System.Drawing.Size(51, 20);
+            this.LedSendSingleTxt.TabIndex = 6;
             // 
-            // textBox3
+            // PhysAddressTxt
             // 
-            this.textBox3.Location = new System.Drawing.Point(130, 24);
-            this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(89, 20);
-            this.textBox3.TabIndex = 7;
+            this.PhysAddressTxt.Location = new System.Drawing.Point(130, 24);
+            this.PhysAddressTxt.Name = "PhysAddressTxt";
+            this.PhysAddressTxt.Size = new System.Drawing.Size(89, 20);
+            this.PhysAddressTxt.TabIndex = 7;
             // 
-            // comboBox8
+            // ModulCellInfoCmb
             // 
-            this.comboBox8.FormattingEnabled = true;
-            this.comboBox8.Location = new System.Drawing.Point(6, 27);
-            this.comboBox8.Name = "comboBox8";
-            this.comboBox8.Size = new System.Drawing.Size(51, 21);
-            this.comboBox8.TabIndex = 8;
+            this.ModulCellInfoCmb.FormattingEnabled = true;
+            this.ModulCellInfoCmb.Location = new System.Drawing.Point(6, 27);
+            this.ModulCellInfoCmb.Name = "ModulCellInfoCmb";
+            this.ModulCellInfoCmb.Size = new System.Drawing.Size(51, 21);
+            this.ModulCellInfoCmb.TabIndex = 8;
             // 
-            // comboBox9
+            // RowCellInfoCmb
             // 
-            this.comboBox9.FormattingEnabled = true;
-            this.comboBox9.Location = new System.Drawing.Point(6, 54);
-            this.comboBox9.Name = "comboBox9";
-            this.comboBox9.Size = new System.Drawing.Size(51, 21);
-            this.comboBox9.TabIndex = 9;
+            this.RowCellInfoCmb.FormattingEnabled = true;
+            this.RowCellInfoCmb.Location = new System.Drawing.Point(6, 54);
+            this.RowCellInfoCmb.Name = "RowCellInfoCmb";
+            this.RowCellInfoCmb.Size = new System.Drawing.Size(51, 21);
+            this.RowCellInfoCmb.TabIndex = 9;
             // 
-            // comboBox10
+            // CellCellInfoCmb
             // 
-            this.comboBox10.FormattingEnabled = true;
-            this.comboBox10.Location = new System.Drawing.Point(6, 81);
-            this.comboBox10.Name = "comboBox10";
-            this.comboBox10.Size = new System.Drawing.Size(51, 21);
-            this.comboBox10.TabIndex = 10;
+            this.CellCellInfoCmb.FormattingEnabled = true;
+            this.CellCellInfoCmb.Location = new System.Drawing.Point(6, 81);
+            this.CellCellInfoCmb.Name = "CellCellInfoCmb";
+            this.CellCellInfoCmb.Size = new System.Drawing.Size(51, 21);
+            this.CellCellInfoCmb.TabIndex = 10;
             // 
             // ModulSendLbl
             // 
@@ -585,14 +593,14 @@ namespace ISStorehouseAdmin
             this.LedsPerRowSendLbl.TabIndex = 14;
             this.LedsPerRowSendLbl.Text = "LedsPerRow";
             // 
-            // label8
+            // PhysAddressLbl
             // 
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(225, 24);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(35, 13);
-            this.label8.TabIndex = 15;
-            this.label8.Text = "label8";
+            this.PhysAddressLbl.AutoSize = true;
+            this.PhysAddressLbl.Location = new System.Drawing.Point(225, 24);
+            this.PhysAddressLbl.Name = "PhysAddressLbl";
+            this.PhysAddressLbl.Size = new System.Drawing.Size(68, 13);
+            this.PhysAddressLbl.TabIndex = 15;
+            this.PhysAddressLbl.Text = "PhysAddress";
             // 
             // ModulCellInfoLbl
             // 
@@ -629,6 +637,7 @@ namespace ISStorehouseAdmin
             this.SendSingleBtn.TabIndex = 16;
             this.SendSingleBtn.Text = "Send";
             this.SendSingleBtn.UseVisualStyleBackColor = true;
+            this.SendSingleBtn.Click += new System.EventHandler(this.SendSingleBtn_Click);
             // 
             // ScanCellInfoBtn
             // 
@@ -638,6 +647,7 @@ namespace ISStorehouseAdmin
             this.ScanCellInfoBtn.TabIndex = 19;
             this.ScanCellInfoBtn.Text = "Scan Cell";
             this.ScanCellInfoBtn.UseVisualStyleBackColor = true;
+            this.ScanCellInfoBtn.Click += new System.EventHandler(this.ScanCellInfoBtn_Click);
             // 
             // Form1
             // 
@@ -700,18 +710,18 @@ namespace ISStorehouseAdmin
         private System.Windows.Forms.Button FirstScanBtn;
         private System.Windows.Forms.Label ToLbl;
         private System.Windows.Forms.Label FranLbl;
-        private System.Windows.Forms.ComboBox comboBox2;
-        private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.ComboBox ToScanCmb;
+        private System.Windows.Forms.ComboBox FromScanCmb;
         private System.Windows.Forms.Button GenerateBtn;
         private System.Windows.Forms.Button AddPrefixBtn;
         private System.Windows.Forms.Label DiagModulBtn;
         private System.Windows.Forms.Label CellCellInfoLbl;
         private System.Windows.Forms.Label RowCellInfoLbl;
         private System.Windows.Forms.Label ModulCellInfoLbl;
-        private System.Windows.Forms.ComboBox comboBox10;
-        private System.Windows.Forms.ComboBox comboBox9;
-        private System.Windows.Forms.ComboBox comboBox8;
-        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.ComboBox CellCellInfoCmb;
+        private System.Windows.Forms.ComboBox RowCellInfoCmb;
+        private System.Windows.Forms.ComboBox ModulCellInfoCmb;
+        private System.Windows.Forms.Label PhysAddressLbl;
         private System.Windows.Forms.Label LedsPerRowSendLbl;
         private System.Windows.Forms.Label Color2SendLbl;
         private System.Windows.Forms.Label EffectSendLbl;
@@ -719,14 +729,14 @@ namespace ISStorehouseAdmin
         private System.Windows.Forms.Label LedSendLbl;
         private System.Windows.Forms.Label RowSendLbl;
         private System.Windows.Forms.Label ModulSendLbl;
-        private System.Windows.Forms.TextBox textBox3;
-        private System.Windows.Forms.TextBox textBox2;
-        private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.ComboBox comboBox7;
-        private System.Windows.Forms.ComboBox comboBox6;
-        private System.Windows.Forms.ComboBox comboBox5;
-        private System.Windows.Forms.ComboBox comboBox4;
-        private System.Windows.Forms.ComboBox comboBox3;
+        private System.Windows.Forms.TextBox PhysAddressTxt;
+        private System.Windows.Forms.TextBox LedSendSingleTxt;
+        private System.Windows.Forms.TextBox LedsPerRowSendSingle;
+        private System.Windows.Forms.ComboBox Color0SendSingleCmb;
+        private System.Windows.Forms.ComboBox EffectSendSingleCmb;
+        private System.Windows.Forms.ComboBox Color2SendSingleCmb;
+        private System.Windows.Forms.ComboBox RowSendSingleCmb;
+        private System.Windows.Forms.ComboBox ModulSendSingleCmb;
         private System.Windows.Forms.Button ScanCellInfoBtn;
         private System.Windows.Forms.Button SendSingleBtn;
     }

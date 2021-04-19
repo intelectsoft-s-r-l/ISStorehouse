@@ -46,6 +46,11 @@ namespace ISStorehouseDLL
             realm.Dispose();
         }
 
+        public void CellInfo()
+        {
+
+        }
+
         /// <summary>
         /// Get information about a list of cells from database
         /// </summary>
