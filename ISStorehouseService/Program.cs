@@ -7,19 +7,42 @@ using System.Threading.Tasks;
 
 namespace ISStorehouseService
 {
-    static class Program
+    public partial class Program : ServiceBase
     {
+        protected override void Dispose(bool disposing)
+        {
+            try
+            {
+                if (disposing && components is object)
+                {
+                    components.Dispose();
+                }
+            }
+            finally
+            {
+                base.Dispose(disposing);
+            }
+        }
+
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
-        static void Main()
+        public static void Main()
         {
             ServiceBase[] ServicesToRun;
             ServicesToRun = new ServiceBase[]
             {
-                new Service1()
+                new SHService()
             };
             ServiceBase.Run(ServicesToRun);
+        }
+
+        private System.ComponentModel.IContainer components;
+
+        private void InitializeComponent()
+        {
+            components = new System.ComponentModel.Container();
+            ServiceName = "StorehouseService";
         }
     }
 }

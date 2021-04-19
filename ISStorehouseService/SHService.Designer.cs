@@ -1,7 +1,7 @@
 ﻿
 namespace ISStorehouseService
 {
-    partial class Service1
+    partial class SHService
     {
         /// <summary> 
         /// Required designer variable.
