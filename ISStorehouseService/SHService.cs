@@ -71,10 +71,16 @@ namespace ISStorehouseService
             {
                 StorehouseService storehouse = new StorehouseService();
 
+                string ipHost = MetaUri;
+                if (MetaUri == null || ipHost.Length == 0)
+                    ipHost = "localhost";
+
                 if (Port != "0")
                 {
                     string servicename = "ISStorehouseService";
                     string uriS = "http://{0}:{1}/" + servicename;
+
+                    uriS = string.Format(uriS, ipHost, Port);
                     ISStorehouseHost = new ServiceHost(storehouse, new Uri(uriS));
 
                     WebHttpBinding httpExportBinding = new WebHttpBinding();
