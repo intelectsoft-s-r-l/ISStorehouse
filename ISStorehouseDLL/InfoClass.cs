@@ -24,6 +24,23 @@ namespace ISStorehouseDLL
 
             realm.Dispose();
         }
+        
+        public async void SendToCells(string physicAddress, byte color0, byte color2, byte effect)
+        {
+            var realm = await Realm.GetInstanceAsync();
+            var address = realm.All<Storehouse>().FirstOrDefault(
+                x => x.PhysicAddress == physicAddress);
+
+            realm.Write(() =>
+            {
+                address.Color1 = color0;
+                address.Color2 = color2;
+                address.Effect = effect;
+                address.Modify = true;
+            });
+
+            realm.Dispose();
+        }
 
         public string GetCellInformation(int modul, int row, int collumn)
         {

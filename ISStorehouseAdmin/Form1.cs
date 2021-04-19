@@ -25,6 +25,17 @@ namespace ISStorehouseAdmin
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            var realm = Realm.GetInstance();
+
+            var addresses = realm.All<Storehouse>();
+
+            foreach(var addres in addresses)
+            {
+                this.PhysAddreses.Items.Add(addres.PhysicAddress);
+            }
+
+            realm.Dispose();
+
             var Portnames = SerialPort.GetPortNames();
             this.PortCmb.Items.AddRange(Portnames);
             this.PortCmb.SelectedItem = Portnames.LastOrDefault();
@@ -107,6 +118,7 @@ namespace ISStorehouseAdmin
         {
             info.SendToCell(this.PhysAddressTxt.Text, Convert.ToByte(this.Color0SendSingleCmb.SelectedItem), Convert.ToByte(this.Color2SendSingleCmb.SelectedItem), Convert.ToByte(this.EffectSendSingleCmb.SelectedItem));
 
+
         }
 
         private void ScanCellInfoBtn_Click(object sender, EventArgs e)
@@ -114,6 +126,41 @@ namespace ISStorehouseAdmin
             var message = info.GetCellInformation(Convert.ToInt32(this.ModulCellInfoCmb.Text), Convert.ToInt32(this.RowCellInfoCmb.Text), Convert.ToInt32(this.CellCellInfoCmb.Text));
 
             MessageBox.Show(message, "Scan");
+        }
+
+        private void Demo1Btn_Click(object sender, EventArgs e)
+        {
+            scan.ClearOneModul(Convert.ToInt32(1));
+            info.SendToCell("01003", 2, Convert.ToByte(this.Color2SendSingleCmb.SelectedItem), 1);
+            info.SendToCell("01008", 3, Convert.ToByte(this.Color2SendSingleCmb.SelectedItem), 1);
+            info.SendToCell("01206", 5, Convert.ToByte(this.Color2SendSingleCmb.SelectedItem), 1);
+            info.SendToCell("01307", 1, Convert.ToByte(this.Color2SendSingleCmb.SelectedItem), 1);
+        }
+
+        private void Demo2Btn_Click(object sender, EventArgs e)
+        {
+            scan.ClearOneModul(Convert.ToInt32(1));
+            info.SendToCell("01006", 2, Convert.ToByte(this.Color2SendSingleCmb.SelectedItem), 1);
+            info.SendToCell("01103", 3, Convert.ToByte(this.Color2SendSingleCmb.SelectedItem), 1);
+            info.SendToCell("01201", 5, Convert.ToByte(this.Color2SendSingleCmb.SelectedItem), 1);
+            info.SendToCell("01207", 1, Convert.ToByte(this.Color2SendSingleCmb.SelectedItem), 1);
+        }
+
+        private void SendMultipleBtn_Click(object sender, EventArgs e)
+        {
+            scan.ClearOneModul(Convert.ToInt32(1));
+            Random rnd = new Random();
+            foreach (object element in this.PhysAddreses.SelectedItems)
+            {
+                int color = rnd.Next(1, 7);
+                info.SendToCells(element.ToString(), Convert.ToByte(color), Convert.ToByte(this.Color2SendSingleCmb.SelectedItem), 1);
+
+            }
+        }
+
+        private void SendSingleGroup_Enter(object sender, EventArgs e)
+        {
+
         }
     }
 }
