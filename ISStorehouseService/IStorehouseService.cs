@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace ISStorehouseService
 {
-    [ServiceContract]
+    [ServiceContract(Namespace = "ISStorehouseService")]
     public interface IStorehouseService
     {
         [OperationContract]
@@ -16,7 +16,7 @@ namespace ISStorehouseService
         Task DiagnoseAllStorehouse();
 
         [OperationContract]
-        [WebGet]
+        [WebGet(UriTemplate = "DiagnoseOneModul?modul={modul}")]
         Task DiagnoseOneModul(int modul);
 
         [OperationContract]
