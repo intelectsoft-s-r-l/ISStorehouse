@@ -1,4 +1,6 @@
-﻿using System;
+﻿using ISStorehouseDLL;
+using ISStorehouseDLL.Common;
+using System;
 using System.ComponentModel;
 using System.Configuration;
 using System.Configuration.Install;
@@ -12,10 +14,9 @@ namespace ISStorehouseService
 {
     public partial class SHService : ServiceBase
     {
-        //public ServiceHost serviceHost = null;
+        Settings Settings = new Settings();
         public SHService()
         {
-            //ServiceName = "ISStorehouseService";
             InitializeComponent();
             stopping = false;
             stoppedEvent = new ManualResetEvent(false);
@@ -31,24 +32,11 @@ namespace ISStorehouseService
 
         protected override void OnStart(string[] args)
         {
-            //if(serviceHost != null)
-            //{
-            //    serviceHost.Close();
-            //}
-
-            //serviceHost = new ServiceHost(typeof(StorehouseService));
-            //serviceHost.Open();
             StartService();
         }
 
         protected override void OnStop()
         {
-            //if (serviceHost != null)
-            //{
-            //    serviceHost.Close();
-            //    serviceHost = null;
-            //}
-
             EventLog.WriteEntry("IS Storehouse service OnStop");
             stopping = true;
             stoppedEvent.WaitOne();
@@ -79,9 +67,8 @@ namespace ISStorehouseService
         private void SHServiceWorker(object state)
         {
             SHServiceStart();
-            while (!stopping)
-                Thread.Sleep(5000);
-            stoppedEvent.Set();
+            Settings.CheckDataBase();
+
         }
 
         private void SHServiceStart()

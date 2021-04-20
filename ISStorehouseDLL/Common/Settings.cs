@@ -19,6 +19,13 @@ namespace ISStorehouseDLL.Common
             Active       //1
         }
 
+        public enum BaseColors
+        {
+            Red = 1,            // 1
+            Green = 2,          // 2
+            Blue = 3,           // 3
+        }
+
         public enum Colors
         {
             Black,          // 0
@@ -76,7 +83,15 @@ namespace ISStorehouseDLL.Common
 
             var Com = "COM5";
             var Baud = "9600";
-            modbus.Open(Com, Convert.ToInt32(Baud), 8, System.IO.Ports.Parity.None, System.IO.Ports.StopBits.One);
+            try
+            {
+                modbus.Open(Com, Convert.ToInt32(Baud), 8, System.IO.Ports.Parity.None, System.IO.Ports.StopBits.One);
+
+            }
+            catch (Exception ex)
+            {
+                var message = ex;
+            }
 
             realm.Dispose();
         }
@@ -98,7 +113,7 @@ namespace ISStorehouseDLL.Common
 
             if (ignoreModul != null)
             {
-                foreach (Colors colors in (Colors[])Enum.GetValues(typeof(Colors)))
+                foreach (BaseColors colors in (BaseColors[])Enum.GetValues(typeof(BaseColors)))
                 {
                     foreach (var deposit in Deposit)
                     {
@@ -108,13 +123,21 @@ namespace ISStorehouseDLL.Common
                             {
                                 for (int j = 0; j <= deposit.Collumns; j++)
                                 {
-                                    modbus.WriteSingle(Convert.ToInt32(deposit.Module),
+                                    try
+                                    {
+                                        modbus.WriteSingle(Convert.ToInt32(deposit.Module),
                                         Convert.ToInt16(i),
                                         Convert.ToUInt16(deposit.Collumns),
                                         Convert.ToInt16(j),
                                         Convert.ToByte(Effects.NoEffect),
                                         Convert.ToByte(colors),
                                         Convert.ToByte(Colors.Black));
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        var exception = ex;
+                                    }
+
                                 }
                             }
                         }
@@ -133,13 +156,22 @@ namespace ISStorehouseDLL.Common
                         {
                             for (int j = 0; j <= deposit.Collumns; j++)
                             {
-                                modbus.WriteSingle(Convert.ToInt32(deposit.Module),
+                                try
+                                {
+                                    modbus.WriteSingle(Convert.ToInt32(deposit.Module),
                                     Convert.ToInt16(i),
                                     Convert.ToUInt16(deposit.Collumns),
                                     Convert.ToInt16(j),
                                     Convert.ToByte(Effects.NoEffect),
                                     Convert.ToByte(Colors.Black),
                                     Convert.ToByte(Colors.Black));
+
+                                }
+                                catch (Exception ex)
+                                {
+                                    var message = ex;
+                                }
+
                             }
                         }
                     }
@@ -159,7 +191,7 @@ namespace ISStorehouseDLL.Common
             }
             else
             {
-                foreach (Colors colors in (Colors[])Enum.GetValues(typeof(Colors)))
+                foreach (BaseColors colors in (BaseColors[])Enum.GetValues(typeof(Colors)))
                 {
                     foreach (var deposit in Deposit)
                     {
@@ -167,13 +199,22 @@ namespace ISStorehouseDLL.Common
                         {
                             for (int j = 0; j <= deposit.Collumns; j++)
                             {
-                                modbus.WriteSingle(Convert.ToInt32(deposit.Module),
+                                try
+                                {
+                                    modbus.WriteSingle(Convert.ToInt32(deposit.Module),
                                     Convert.ToInt16(i),
                                     Convert.ToUInt16(deposit.Collumns),
                                     Convert.ToInt16(j),
                                     Convert.ToByte(Effects.NoEffect),
                                     Convert.ToByte(colors),
                                     Convert.ToByte(Colors.Black));
+
+                                }
+                                catch (Exception ex)
+                                {
+                                    var message = ex;
+                                }
+
                             }
                         }
 
@@ -191,13 +232,22 @@ namespace ISStorehouseDLL.Common
                     {
                         for (int j = 0; j <= deposit.Collumns; j++)
                         {
-                            modbus.WriteSingle(Convert.ToInt32(deposit.Module),
+                            try
+                            {
+                                modbus.WriteSingle(Convert.ToInt32(deposit.Module),
                                 Convert.ToInt16(i),
                                 Convert.ToUInt16(deposit.Collumns),
                                 Convert.ToInt16(j),
                                 Convert.ToByte(Effects.NoEffect),
                                 Convert.ToByte(Colors.Black),
                                 Convert.ToByte(Colors.Black));
+
+                            }
+                            catch (Exception ex)
+                            {
+                                var message = ex;
+                            }
+
                         }
                     }
                 }
@@ -229,7 +279,7 @@ namespace ISStorehouseDLL.Common
             var ModuleId = modul;
             var Deposit = realm.All<Moduls>();
 
-            foreach (Colors colors in (Colors[])Enum.GetValues(typeof(Colors)))
+            foreach (BaseColors colors in (BaseColors[])Enum.GetValues(typeof(BaseColors)))
             {
                 foreach (var deposit in Deposit)
                 {
@@ -237,13 +287,21 @@ namespace ISStorehouseDLL.Common
                     {
                         for (int j = 0; j <= deposit.Collumns; j++)
                         {
-                            modbus.WriteSingle(Convert.ToInt32(ModuleId),
-                                Convert.ToInt16(i),
-                                Convert.ToUInt16(deposit.Collumns),
-                                Convert.ToInt16(j),
-                                Convert.ToByte(Effects.NoEffect),
-                                Convert.ToByte(colors),
-                                Convert.ToByte(Colors.Black));
+                            try
+                            {
+                                modbus.WriteSingle(Convert.ToInt32(ModuleId),
+    Convert.ToInt16(i),
+    Convert.ToUInt16(deposit.Collumns),
+    Convert.ToInt16(j),
+    Convert.ToByte(Effects.NoEffect),
+    Convert.ToByte(colors),
+    Convert.ToByte(Colors.Black));
+                            }
+                            catch (Exception ex)
+                            {
+                                var message = ex;
+                            }
+
                         }
                     }
                 }

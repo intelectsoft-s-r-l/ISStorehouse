@@ -12,11 +12,12 @@ namespace ISStorehouseDLL
     {
         private Modbus modbus = new Modbus();
 
-        public void ClearAllModuls()
+        public string ClearAllModuls()
         {
 
             var realm = Realm.GetInstance();
             var moduls = realm.All<Storehouse>();
+
 
             foreach (var modul in moduls)
             {
@@ -27,10 +28,11 @@ namespace ISStorehouseDLL
                     modul.Effect = Convert.ToByte(Effects.NoEffect);
                     modul.Modify = true;
                 });
+
+
             }
-
             realm.Dispose();
-
+            return "All moduls are cleard";
         }
         public void ClearOneModul(int modul)
         {

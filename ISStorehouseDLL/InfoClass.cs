@@ -15,7 +15,6 @@ namespace ISStorehouseDLL
 
             realm.Write(() =>
             {
-
                 address.Color1 = color0;
                 address.Color2 = color2;
                 address.Effect = effect;
@@ -25,19 +24,19 @@ namespace ISStorehouseDLL
             realm.Dispose();
         }
         
-        public async void SendToCells(string physicAddress, byte color0, byte color2, byte effect)
+        public async void SendToCells(string physicAddress)
         {
             var realm = await Realm.GetInstanceAsync();
             var address = realm.All<Storehouse>().FirstOrDefault(
                 x => x.PhysicAddress == physicAddress);
 
-            realm.Write(() =>
+            Random rnd = new Random();
+            foreach (object element in physicAddress)
             {
-                address.Color1 = color0;
-                address.Color2 = color2;
-                address.Effect = effect;
-                address.Modify = true;
-            });
+                int color = rnd.Next(1, 7);
+                SendToCell(element.ToString(), Convert.ToByte(color), Convert.ToByte(0), 1);
+
+            }
 
             realm.Dispose();
         }
@@ -65,7 +64,7 @@ namespace ISStorehouseDLL
 
         public void CellInfo()
         {
-
+            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -73,7 +72,7 @@ namespace ISStorehouseDLL
         /// </summary>
         public void CellListInfo()
         {
-            throw new NotSupportedException();
+            throw new NotImplementedException();
         }
 
         /// <summary>

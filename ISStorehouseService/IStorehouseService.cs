@@ -16,8 +16,8 @@ namespace ISStorehouseService
         Task DiagnoseAllStorehouse();
 
         [OperationContract]
-        [WebGet(UriTemplate = "DiagnoseOneModul?modul={modul}")]
-        Task DiagnoseOneModul(int modul);
+        [WebGet]
+        Task DiagnoseOneModul(short modul);
 
         [OperationContract]
         [WebGet]
@@ -29,15 +29,15 @@ namespace ISStorehouseService
 
         [OperationContract]
         [WebGet]
-        Task SendSingleCell(string address, byte color1, byte color2, byte effect);
+        Task<string> SendSingleCell(string address, byte color1, byte color2, byte effect);
 
         [OperationContract]
         [WebGet]
-        Task SendListCells();
+        Task SendListCells(string address);
 
         [OperationContract]
         [WebGet]
-        Task SingleCellInfo();
+        Task SingleCellInfo(int modul);
 
         [OperationContract]
         [WebGet]

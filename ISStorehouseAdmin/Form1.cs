@@ -31,7 +31,7 @@ namespace ISStorehouseAdmin
 
             foreach(var addres in addresses)
             {
-                this.PhysAddreses.Items.Add(addres.PhysicAddress);
+                this.PhysAddresesList.Items.Add(addres.PhysicAddress);
             }
 
             realm.Dispose();
@@ -128,37 +128,17 @@ namespace ISStorehouseAdmin
             MessageBox.Show(message, "Scan");
         }
 
-        private void Demo1Btn_Click(object sender, EventArgs e)
-        {
-            scan.ClearOneModul(Convert.ToInt32(1));
-            info.SendToCell("01003", 2, Convert.ToByte(this.Color2SendSingleCmb.SelectedItem), 1);
-            info.SendToCell("01008", 3, Convert.ToByte(this.Color2SendSingleCmb.SelectedItem), 1);
-            info.SendToCell("01206", 5, Convert.ToByte(this.Color2SendSingleCmb.SelectedItem), 1);
-            info.SendToCell("01307", 1, Convert.ToByte(this.Color2SendSingleCmb.SelectedItem), 1);
-        }
-
-        private void Demo2Btn_Click(object sender, EventArgs e)
-        {
-            scan.ClearOneModul(Convert.ToInt32(1));
-            info.SendToCell("01006", 2, Convert.ToByte(this.Color2SendSingleCmb.SelectedItem), 1);
-            info.SendToCell("01103", 3, Convert.ToByte(this.Color2SendSingleCmb.SelectedItem), 1);
-            info.SendToCell("01201", 5, Convert.ToByte(this.Color2SendSingleCmb.SelectedItem), 1);
-            info.SendToCell("01207", 1, Convert.ToByte(this.Color2SendSingleCmb.SelectedItem), 1);
-        }
-
         private void SendMultipleBtn_Click(object sender, EventArgs e)
         {
-            scan.ClearOneModul(Convert.ToInt32(1));
-            Random rnd = new Random();
-            foreach (object element in this.PhysAddreses.SelectedItems)
-            {
-                int color = rnd.Next(1, 7);
-                info.SendToCells(element.ToString(), Convert.ToByte(color), Convert.ToByte(this.Color2SendSingleCmb.SelectedItem), 1);
-
-            }
+            info.SendToCells(this.PhysAddresesList.SelectedItems.ToString());
         }
 
         private void SendSingleGroup_Enter(object sender, EventArgs e)
+        {
+
+        }
+
+        private void SendTab_Click(object sender, EventArgs e)
         {
 
         }

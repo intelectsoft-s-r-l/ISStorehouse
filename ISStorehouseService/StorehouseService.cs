@@ -1,7 +1,9 @@
 ﻿using ISStorehouseDLL;
 using ISStorehouseDLL.Common;
+using ISStorehouseService.Responsed;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.ServiceModel;
 using System.Text;
@@ -13,48 +15,97 @@ namespace ISStorehouseService
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single, ConcurrencyMode = ConcurrencyMode.Multiple, MaxItemsInObjectGraph = 2147483647, IncludeExceptionDetailInFaults = true)]
     public class StorehouseService : IStorehouseService
     {
-        //private readonly ILogger<StorehouseService> _logger;
         private Settings Settings = new Settings();
         private InfoClass Info = new InfoClass();
         private ScanClass Scan = new ScanClass();
+        private SHService SHService = new SHService();
+        private BaseResponsed responsed = new BaseResponsed();
 
-        public StorehouseService(/*ILogger<StorehouseService> logger*/)
+        public StorehouseService()
         {
-            //_logger = logger;
         }
 
         public async Task DiagnoseAllStorehouse()
         {
-            Settings.AllModulsDiagnose();
+            try
+            {
+                Settings.AllModulsDiagnose();
+            }
+            catch (Exception ex)
+            {
+                SHService.EventLog.WriteEntry(ex.ToString());
+            }
         }
 
-        public async Task DiagnoseOneModul(int modul)
+        public async Task DiagnoseOneModul(short modul)
         {
-            throw new NotImplementedException();
+            try
+            {
+                Settings.OneModulTest(modul);
+
+            }
+            catch (Exception ex)
+            {
+                SHService.EventLog.WriteEntry(ex.ToString());
+            }
         }
 
         public async Task ClearAllStorehouse()
         {
-            throw new NotImplementedException();
+            try
+            {
+                Scan.ClearAllModuls();
+                
+            }
+            catch (Exception ex)
+            {
+                SHService.EventLog.WriteEntry(ex.ToString());
+            }
+
         }
 
         public async Task ClearOneModul(int modul)
         {
-            Scan.ClearOneModul(modul);
+            try
+            {
+                Scan.ClearOneModul(modul);
+
+            }
+            catch (Exception ex)
+            {
+                SHService.EventLog.WriteEntry(ex.ToString());
+            }
         }
 
-        public async Task SendSingleCell(string address, byte color1, byte color2, byte effect)
+        public async Task<string> SendSingleCell(string address, byte color1, byte color2, byte effect)
         {
-            Info.SendToCell(address, color1, color2, effect);
+            try
+            {
+                Info.SendToCell(address, color1, color2, effect);
+
+            }
+            catch (Exception ex)
+            {
+                SHService.EventLog.WriteEntry(ex.ToString());
+            }
+            return address;
 
         }
 
-        public async Task SendListCells()
+        public async Task SendListCells(string address)
         {
-            throw new NotImplementedException();
+            try
+            {
+                Info.SendToCells(address);
+
+            }
+            catch (Exception ex)
+            {
+                SHService.EventLog.WriteEntry(ex.ToString());
+            }
         }
 
-        public async Task SingleCellInfo()
+        public async Task SingleCellInfo(int modul)
         {
             throw new NotImplementedException();
         }
@@ -68,6 +119,13 @@ namespace ISStorehouseService
         {
             Disabled,    //0
             Active       //1
+        }
+
+        public enum BaseColors
+        {
+            Red = 1,
+            Green = 2,
+            Blue = 3,
         }
 
         public enum Colors
@@ -88,5 +146,6 @@ namespace ISStorehouseService
             Blink,                // 1
             DoubleBlink,          // 2
         }
+
     }
 }

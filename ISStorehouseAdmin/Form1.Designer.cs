@@ -69,6 +69,8 @@ namespace ISStorehouseAdmin
             this.RowCellInfoCmb = new System.Windows.Forms.ComboBox();
             this.ModulCellInfoCmb = new System.Windows.Forms.ComboBox();
             this.SendSingleGroup = new System.Windows.Forms.GroupBox();
+            this.SendMultipleBtn = new System.Windows.Forms.Button();
+            this.PhysAddresesList = new System.Windows.Forms.ListBox();
             this.SendSingleBtn = new System.Windows.Forms.Button();
             this.PhysAddressLbl = new System.Windows.Forms.Label();
             this.LedsPerRowSendLbl = new System.Windows.Forms.Label();
@@ -80,10 +82,6 @@ namespace ISStorehouseAdmin
             this.Color0SendSingleCmb = new System.Windows.Forms.ComboBox();
             this.EffectSendSingleCmb = new System.Windows.Forms.ComboBox();
             this.Color2SendSingleCmb = new System.Windows.Forms.ComboBox();
-            this.Demo2Btn = new System.Windows.Forms.Button();
-            this.Demo1Btn = new System.Windows.Forms.Button();
-            this.PhysAddreses = new System.Windows.Forms.ListBox();
-            this.SendMultipleBtn = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.OpenTab.SuspendLayout();
             this.ConnectGroup.SuspendLayout();
@@ -392,8 +390,6 @@ namespace ISStorehouseAdmin
             // 
             // SendTab
             // 
-            this.SendTab.Controls.Add(this.Demo1Btn);
-            this.SendTab.Controls.Add(this.Demo2Btn);
             this.SendTab.Controls.Add(this.CellInfoGroup);
             this.SendTab.Controls.Add(this.SendSingleGroup);
             this.SendTab.Location = new System.Drawing.Point(4, 22);
@@ -402,6 +398,7 @@ namespace ISStorehouseAdmin
             this.SendTab.TabIndex = 2;
             this.SendTab.Text = "Send";
             this.SendTab.UseVisualStyleBackColor = true;
+            this.SendTab.Click += new System.EventHandler(this.SendTab_Click);
             // 
             // CellInfoGroup
             // 
@@ -483,7 +480,7 @@ namespace ISStorehouseAdmin
             // SendSingleGroup
             // 
             this.SendSingleGroup.Controls.Add(this.SendMultipleBtn);
-            this.SendSingleGroup.Controls.Add(this.PhysAddreses);
+            this.SendSingleGroup.Controls.Add(this.PhysAddresesList);
             this.SendSingleGroup.Controls.Add(this.SendSingleBtn);
             this.SendSingleGroup.Controls.Add(this.PhysAddressLbl);
             this.SendSingleGroup.Controls.Add(this.LedsPerRowSendLbl);
@@ -502,6 +499,25 @@ namespace ISStorehouseAdmin
             this.SendSingleGroup.TabStop = false;
             this.SendSingleGroup.Text = "Send Single";
             this.SendSingleGroup.Enter += new System.EventHandler(this.SendSingleGroup_Enter);
+            // 
+            // SendMultipleBtn
+            // 
+            this.SendMultipleBtn.Location = new System.Drawing.Point(195, 165);
+            this.SendMultipleBtn.Name = "SendMultipleBtn";
+            this.SendMultipleBtn.Size = new System.Drawing.Size(100, 23);
+            this.SendMultipleBtn.TabIndex = 19;
+            this.SendMultipleBtn.Text = "Send list";
+            this.SendMultipleBtn.UseVisualStyleBackColor = true;
+            this.SendMultipleBtn.Click += new System.EventHandler(this.SendMultipleBtn_Click);
+            // 
+            // PhysAddresesList
+            // 
+            this.PhysAddresesList.FormattingEnabled = true;
+            this.PhysAddresesList.Location = new System.Drawing.Point(175, 23);
+            this.PhysAddresesList.Name = "PhysAddresesList";
+            this.PhysAddresesList.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
+            this.PhysAddresesList.Size = new System.Drawing.Size(120, 95);
+            this.PhysAddresesList.TabIndex = 18;
             // 
             // SendSingleBtn
             // 
@@ -596,45 +612,6 @@ namespace ISStorehouseAdmin
             this.Color2SendSingleCmb.Size = new System.Drawing.Size(51, 21);
             this.Color2SendSingleCmb.TabIndex = 2;
             // 
-            // Demo2Btn
-            // 
-            this.Demo2Btn.Location = new System.Drawing.Point(582, 97);
-            this.Demo2Btn.Name = "Demo2Btn";
-            this.Demo2Btn.Size = new System.Drawing.Size(75, 23);
-            this.Demo2Btn.TabIndex = 3;
-            this.Demo2Btn.Text = "Demo2";
-            this.Demo2Btn.UseVisualStyleBackColor = true;
-            this.Demo2Btn.Click += new System.EventHandler(this.Demo2Btn_Click);
-            // 
-            // Demo1Btn
-            // 
-            this.Demo1Btn.Location = new System.Drawing.Point(582, 68);
-            this.Demo1Btn.Name = "Demo1Btn";
-            this.Demo1Btn.Size = new System.Drawing.Size(75, 23);
-            this.Demo1Btn.TabIndex = 4;
-            this.Demo1Btn.Text = "Demo1";
-            this.Demo1Btn.UseVisualStyleBackColor = true;
-            this.Demo1Btn.Click += new System.EventHandler(this.Demo1Btn_Click);
-            // 
-            // PhysAddreses
-            // 
-            this.PhysAddreses.FormattingEnabled = true;
-            this.PhysAddreses.Location = new System.Drawing.Point(175, 23);
-            this.PhysAddreses.Name = "PhysAddreses";
-            this.PhysAddreses.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
-            this.PhysAddreses.Size = new System.Drawing.Size(120, 95);
-            this.PhysAddreses.TabIndex = 18;
-            // 
-            // SendMultipleBtn
-            // 
-            this.SendMultipleBtn.Location = new System.Drawing.Point(195, 165);
-            this.SendMultipleBtn.Name = "SendMultipleBtn";
-            this.SendMultipleBtn.Size = new System.Drawing.Size(100, 23);
-            this.SendMultipleBtn.TabIndex = 19;
-            this.SendMultipleBtn.Text = "Send list";
-            this.SendMultipleBtn.UseVisualStyleBackColor = true;
-            this.SendMultipleBtn.Click += new System.EventHandler(this.SendMultipleBtn_Click);
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -719,9 +696,7 @@ namespace ISStorehouseAdmin
         private System.Windows.Forms.ComboBox Color2SendSingleCmb;
         private System.Windows.Forms.Button ScanCellInfoBtn;
         private System.Windows.Forms.Button SendSingleBtn;
-        private System.Windows.Forms.Button Demo2Btn;
-        private System.Windows.Forms.Button Demo1Btn;
-        public System.Windows.Forms.ListBox PhysAddreses;
+        public System.Windows.Forms.ListBox PhysAddresesList;
         private System.Windows.Forms.Button SendMultipleBtn;
     }
 }
