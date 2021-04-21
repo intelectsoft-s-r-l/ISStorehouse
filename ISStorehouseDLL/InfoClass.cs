@@ -57,8 +57,8 @@ namespace ISStorehouseDLL
                 Response = "Cell is empty";
             }
 
-            return Response;
 
+            return Response;
             realm.Dispose();
         }
 

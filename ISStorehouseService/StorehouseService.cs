@@ -1,6 +1,8 @@
 ﻿using ISStorehouseDLL;
 using ISStorehouseDLL.Common;
 using ISStorehouseService.Responsed;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -21,10 +23,6 @@ namespace ISStorehouseService
         private SHService SHService = new SHService();
         private BaseResponsed responsed = new BaseResponsed();
 
-        public StorehouseService()
-        {
-        }
-
         public async Task DiagnoseAllStorehouse()
         {
             try
@@ -35,19 +33,14 @@ namespace ISStorehouseService
             {
                 SHService.EventLog.WriteEntry(ex.ToString());
             }
+
         }
 
-        public async Task DiagnoseOneModul(short modul)
+        public async Task<List<string>> DiagnoseOneModul(short modul)
         {
-            try
-            {
-                Settings.OneModulTest(modul);
-
-            }
-            catch (Exception ex)
-            {
-                SHService.EventLog.WriteEntry(ex.ToString());
-            }
+            List<string> errs = new List<string>();
+            errs = Settings.OneModulTest(modul);
+            return errs;
         }
 
         public async Task ClearAllStorehouse()
@@ -55,7 +48,7 @@ namespace ISStorehouseService
             try
             {
                 Scan.ClearAllModuls();
-                
+
             }
             catch (Exception ex)
             {
@@ -77,7 +70,7 @@ namespace ISStorehouseService
             }
         }
 
-        public async Task<string> SendSingleCell(string address, byte color1, byte color2, byte effect)
+        public async Task SendSingleCell(string address, byte color1, byte color2, byte effect)
         {
             try
             {
@@ -88,7 +81,7 @@ namespace ISStorehouseService
             {
                 SHService.EventLog.WriteEntry(ex.ToString());
             }
-            return address;
+            //return address + color1 + effect;
 
         }
 

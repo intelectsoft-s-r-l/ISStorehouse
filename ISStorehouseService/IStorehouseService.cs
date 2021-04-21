@@ -17,7 +17,7 @@ namespace ISStorehouseService
 
         [OperationContract]
         [WebGet]
-        Task DiagnoseOneModul(short modul);
+        Task<List<string>> DiagnoseOneModul(short modul);
 
         [OperationContract]
         [WebGet]
@@ -29,7 +29,7 @@ namespace ISStorehouseService
 
         [OperationContract]
         [WebGet]
-        Task<string> SendSingleCell(string address, byte color1, byte color2, byte effect);
+        Task SendSingleCell(string address, byte color1, byte color2, byte effect);
 
         [OperationContract]
         [WebGet]

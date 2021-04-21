@@ -1,6 +1,8 @@
 ﻿using ISStorehouseDLL.Models;
+using Newtonsoft.Json;
 using Realms;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 
@@ -271,7 +273,7 @@ namespace ISStorehouseDLL.Common
             return Message;
         }
 
-        public void OneModulTest(short modul)
+        public List<string> OneModulTest(short modul)
         {
             OpenPort();
 
@@ -290,12 +292,12 @@ namespace ISStorehouseDLL.Common
                             try
                             {
                                 modbus.WriteSingle(Convert.ToInt32(ModuleId),
-    Convert.ToInt16(i),
-    Convert.ToUInt16(deposit.Collumns),
-    Convert.ToInt16(j),
-    Convert.ToByte(Effects.NoEffect),
-    Convert.ToByte(colors),
-    Convert.ToByte(Colors.Black));
+                                    Convert.ToInt16(i),
+                                    Convert.ToUInt16(deposit.Collumns),
+                                    Convert.ToInt16(j),
+                                    Convert.ToByte(Effects.NoEffect),
+                                    Convert.ToByte(colors),
+                                    Convert.ToByte(Colors.Black));
                             }
                             catch (Exception ex)
                             {
@@ -337,6 +339,20 @@ namespace ISStorehouseDLL.Common
                     moduls.Effect = Convert.ToByte(Effects.NoEffect);
                 });
             }
+
+            List<string> errs = new List<string>();
+            var errors = realm.All<Errors>().FirstOrDefault(
+                    x => x.Module == modul);
+
+            errs.Add(errors.Module.ToString());
+            errs.Add(errors.IlegatFunctionCount.ToString());
+            errs.Add(errors.IlegalDataValueCount.ToString());
+            errs.Add(errors.IlegalDataAddressCount.ToString());
+            errs.Add(errors.OverflowErrCount.ToString());
+            errs.Add(errors.CheckSumErrCount.ToString());
+            errs.Add(errors.TotoalErr.ToString());
+
+            return errs;
 
         }
 
