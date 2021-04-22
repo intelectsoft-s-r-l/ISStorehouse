@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace ISStorehouseDLL.Common
 {
@@ -18,7 +19,8 @@ namespace ISStorehouseDLL.Common
         public enum Status
         {
             Disabled,    //0
-            Active       //1
+            Active,      //1
+            Diagnose     //2 
         }
 
         public enum BaseColors
@@ -38,6 +40,12 @@ namespace ISStorehouseDLL.Common
             Aqua,           // 5
             Magenda,        // 6
             White           // 6
+        }
+
+        public enum Respond
+        {
+            OK = 200,
+            Bad_Request = 500,
         }
 
         public enum Effects
@@ -273,60 +281,94 @@ namespace ISStorehouseDLL.Common
             return Message;
         }
 
-        public List<string> OneModulTest(short modul)
+        public async Task OneModulTest(short modul)
         {
             OpenPort();
 
-            var realm = Realm.GetInstance();
+            var realm = await Realm.GetInstanceAsync();
             var ModuleId = modul;
-            var Deposit = realm.All<Moduls>();
+
+            var Deposit = realm.All<Moduls>().FirstOrDefault(
+                x => x.Module == modul);
 
             foreach (BaseColors colors in (BaseColors[])Enum.GetValues(typeof(BaseColors)))
             {
-                foreach (var deposit in Deposit)
+                for (int j = 0; j <= Deposit.Collumns; j++)
                 {
-                    for (int i = 0; i <= deposit.Rows; i++)
-                    {
-                        for (int j = 0; j <= deposit.Collumns; j++)
-                        {
-                            try
-                            {
-                                modbus.WriteSingle(Convert.ToInt32(ModuleId),
-                                    Convert.ToInt16(i),
-                                    Convert.ToUInt16(deposit.Collumns),
-                                    Convert.ToInt16(j),
-                                    Convert.ToByte(Effects.NoEffect),
-                                    Convert.ToByte(colors),
-                                    Convert.ToByte(Colors.Black));
-                            }
-                            catch (Exception ex)
-                            {
-                                var message = ex;
-                            }
 
+                    for (int i = 0; i <= Deposit.Rows; i++)
+                    {
+                        try
+                        {
+                            var Storehouse = realm.All<Storehouse>().FirstOrDefault(
+                                x => x.Collumn == j && x.Row == i);
+
+                            realm.Write(() =>
+                            {
+                                Storehouse.Color1 = Convert.ToByte(colors);
+                                Storehouse.Color2 = Convert.ToByte(Colors.Black);
+                                Storehouse.Effect = Convert.ToByte(Effects.NoEffect);
+                                Storehouse.Modify = true;
+                            });
+                        }
+                        catch (Exception ex)
+                        {
+                            var message = ex;
+                        }
+
+                    }
+                    Thread.Sleep(1000);
+
+                    try
+                    {
+                        for (int i = 0; i <= Deposit.Rows; i++)
+                        {
+                            var Storehouse = realm.All<Storehouse>().FirstOrDefault(
+                            x => x.Collumn == j && x.Row == i);
+
+                            realm.Write(() =>
+                            {
+                                Storehouse.Color1 = Convert.ToByte(Colors.Black);
+                                Storehouse.Color2 = Convert.ToByte(Colors.Black);
+                                Storehouse.Effect = Convert.ToByte(Effects.NoEffect);
+                                Storehouse.Modify = true;
+                            });
                         }
                     }
+                    catch (Exception ex)
+                    {
+                        var message = ex;
+                    }
                 }
+
             }
 
             Thread.Sleep(5000);
 
             var Moduls = realm.All<Storehouse>();
 
-            foreach (var deposit in Deposit)
+            for (int j = 0; j <= Deposit.Collumns; j++)
             {
-                for (int i = 0; i <= deposit.Rows; i++)
+                for (int i = 0; i <= Deposit.Rows; i++)
                 {
-                    for (int j = 0; j <= deposit.Collumns; j++)
+                    //modbus.WriteSingle(Convert.ToInt32(ModuleId),
+                    //    Convert.ToInt16(i),
+                    //    Convert.ToUInt16(Deposit.Collumns),
+                    //    Convert.ToInt16(j),
+                    //    Convert.ToByte(Effects.NoEffect),
+                    //    Convert.ToByte(Colors.Black),
+                    //    Convert.ToByte(Colors.Black));
+
+                    var Storehouse = realm.All<Storehouse>().FirstOrDefault(
+                    x => x.Collumn == j && x.Row == i);
+
+                    realm.Write(() =>
                     {
-                        modbus.WriteSingle(Convert.ToInt32(ModuleId),
-                            Convert.ToInt16(i),
-                            Convert.ToUInt16(deposit.Collumns),
-                            Convert.ToInt16(j),
-                            Convert.ToByte(Effects.NoEffect),
-                            Convert.ToByte(Colors.Black),
-                            Convert.ToByte(Colors.Black));
-                    }
+                        Storehouse.Color1 = Convert.ToByte(Colors.Black);
+                        Storehouse.Color2 = Convert.ToByte(Colors.Black);
+                        Storehouse.Effect = Convert.ToByte(Effects.NoEffect);
+                        Storehouse.Modify = true;
+                    });
                 }
             }
 
@@ -340,20 +382,7 @@ namespace ISStorehouseDLL.Common
                 });
             }
 
-            List<string> errs = new List<string>();
-            var errors = realm.All<Errors>().FirstOrDefault(
-                    x => x.Module == modul);
-
-            errs.Add(errors.Module.ToString());
-            errs.Add(errors.IlegatFunctionCount.ToString());
-            errs.Add(errors.IlegalDataValueCount.ToString());
-            errs.Add(errors.IlegalDataAddressCount.ToString());
-            errs.Add(errors.OverflowErrCount.ToString());
-            errs.Add(errors.CheckSumErrCount.ToString());
-            errs.Add(errors.TotoalErr.ToString());
-
-            return errs;
-
+            realm.Dispose();
         }
 
         public void CheckDataBase()

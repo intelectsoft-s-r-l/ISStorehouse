@@ -66,13 +66,13 @@ namespace ISStorehouseService
 
         private void SHServiceWorker(object state)
         {
-            ////SHServiceStart();
-            ////Settings.CheckDataBase();
-            ///
             SHServiceStart();
-            while (!stopping)
-                Thread.Sleep(5000);
-            stoppedEvent.Set();
+            Settings.CheckDataBase();
+            ///
+            //SHServiceStart();
+            //while (!stopping)
+            //    Thread.Sleep(5000);
+            //stoppedEvent.Set();
 
         }
 

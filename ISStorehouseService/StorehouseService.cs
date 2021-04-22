@@ -1,14 +1,8 @@
 ﻿using ISStorehouseDLL;
 using ISStorehouseDLL.Common;
 using ISStorehouseService.Responsed;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
 using System.ServiceModel;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace ISStorehouseService
@@ -23,79 +17,104 @@ namespace ISStorehouseService
         private SHService SHService = new SHService();
         private BaseResponsed responsed = new BaseResponsed();
 
-        public async Task DiagnoseAllStorehouse()
+        //TODO: VERIFY async of diagnose
+        public async Task<string> DiagnoseAllStorehouse()
         {
+            string message;
             try
             {
                 Settings.AllModulsDiagnose();
+                message = Respond.OK.ToString();
             }
             catch (Exception ex)
             {
-                SHService.EventLog.WriteEntry(ex.ToString());
+                message = Respond.Bad_Request + " " + ex.ToString();
+            }
+            return message;
+        }
+
+        //TODO: VERIFY async of diagnose
+        public async Task<string> DiagnoseOneModul(short modul)
+        {
+            string message;
+            try
+            {
+
+            Settings.OneModulTest(modul);
+            message = Respond.OK.ToString();
+            }
+            catch(Exception ex)
+            {
+                message = ex.ToString();
             }
 
+            return message;
         }
 
-        public async Task<List<string>> DiagnoseOneModul(short modul)
+        public async Task<string> ClearAllStorehouse()
         {
-            List<string> errs = new List<string>();
-            errs = Settings.OneModulTest(modul);
-            return errs;
-        }
-
-        public async Task ClearAllStorehouse()
-        {
+            string message;
             try
             {
                 Scan.ClearAllModuls();
-
+                message = Respond.OK.ToString();
             }
             catch (Exception ex)
             {
-                SHService.EventLog.WriteEntry(ex.ToString());
+                message = Respond.Bad_Request + " " + ex.ToString();
             }
 
+            return message;
         }
 
-        public async Task ClearOneModul(int modul)
+        public async Task<string> ClearOneModul(int modul)
         {
+            string message;
             try
             {
                 Scan.ClearOneModul(modul);
+                message = Respond.OK.ToString();
 
             }
             catch (Exception ex)
             {
-                SHService.EventLog.WriteEntry(ex.ToString());
+                message = Respond.Bad_Request + " " + ex.ToString();
             }
+
+            return message;
         }
 
-        public async Task SendSingleCell(string address, byte color1, byte color2, byte effect)
+        public async Task<string> SendSingleCell(string address, byte color1, byte color2, byte effect)
         {
+            string message;
             try
             {
                 Info.SendToCell(address, color1, color2, effect);
+                message = Respond.OK.ToString();
+
 
             }
             catch (Exception ex)
             {
-                SHService.EventLog.WriteEntry(ex.ToString());
+                message = Respond.Bad_Request + " " + ex.ToString();
             }
-            //return address + color1 + effect;
-
+            return message;
         }
 
-        public async Task SendListCells(string address)
+        public async Task<string> SendListCells(string address)
         {
+            string message;
             try
             {
                 Info.SendToCells(address);
-
+                message = Respond.OK.ToString();
             }
             catch (Exception ex)
             {
-                SHService.EventLog.WriteEntry(ex.ToString());
+                message = Respond.Bad_Request + " " + ex.ToString();
             }
+
+            return message;
         }
 
         public async Task SingleCellInfo(int modul)
@@ -111,7 +130,8 @@ namespace ISStorehouseService
         public enum Status
         {
             Disabled,    //0
-            Active       //1
+            Active,      //1
+            Diagnose     //2 
         }
 
         public enum BaseColors
@@ -138,6 +158,12 @@ namespace ISStorehouseService
             NoEffect,             // 0
             Blink,                // 1
             DoubleBlink,          // 2
+        }
+
+        public enum Respond
+        {
+            OK = 200,
+            Bad_Request = 500,
         }
 
     }

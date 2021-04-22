@@ -13,27 +13,27 @@ namespace ISStorehouseService
     {
         [OperationContract]
         [WebGet]
-        Task DiagnoseAllStorehouse();
+        Task<string> DiagnoseAllStorehouse();
 
         [OperationContract]
         [WebGet]
-        Task<List<string>> DiagnoseOneModul(short modul);
+        Task<string> DiagnoseOneModul(short modul);
 
         [OperationContract]
         [WebGet]
-        Task ClearAllStorehouse();
+        Task<string> ClearAllStorehouse();
 
         [OperationContract]
         [WebGet]
-        Task ClearOneModul(int modul);
+        Task<string> ClearOneModul(int modul);
 
         [OperationContract]
         [WebGet]
-        Task SendSingleCell(string address, byte color1, byte color2, byte effect);
+        Task<string> SendSingleCell(string address, byte color1, byte color2, byte effect);
 
         [OperationContract]
         [WebGet]
-        Task SendListCells(string address);
+        Task<string> SendListCells(string address);
 
         [OperationContract]
         [WebGet]

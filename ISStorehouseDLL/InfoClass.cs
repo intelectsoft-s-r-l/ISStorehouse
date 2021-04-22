@@ -2,12 +2,13 @@
 using Realms;
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace ISStorehouseDLL
 {
     public class InfoClass
     {
-        public async void SendToCell(string physicAddress, byte color0, byte color2, byte effect)
+        public async Task SendToCell(string physicAddress, byte color0, byte color2, byte effect)
         {
             var realm = await Realm.GetInstanceAsync();
             var address = realm.All<Storehouse>().FirstOrDefault(
