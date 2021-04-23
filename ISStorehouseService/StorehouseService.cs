@@ -3,6 +3,7 @@ using ISStorehouseDLL.Common;
 using ISStorehouseService.Responsed;
 using System;
 using System.ServiceModel;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace ISStorehouseService
@@ -14,8 +15,6 @@ namespace ISStorehouseService
         private Settings Settings = new Settings();
         private InfoClass Info = new InfoClass();
         private ScanClass Scan = new ScanClass();
-        private SHService SHService = new SHService();
-        private BaseResponsed responsed = new BaseResponsed();
 
         //TODO: VERIFY async of diagnose
         public async Task<string> DiagnoseAllStorehouse()
@@ -23,7 +22,8 @@ namespace ISStorehouseService
             string message;
             try
             {
-                Settings.AllModulsDiagnose();
+                Thread AllModulsDiagThread = new Thread(() => Settings.AllModulsDiagnose());
+                AllModulsDiagThread.Start();
                 message = Respond.OK.ToString();
             }
             catch (Exception ex)
@@ -32,18 +32,17 @@ namespace ISStorehouseService
             }
             return message;
         }
-
         //TODO: VERIFY async of diagnose
         public async Task<string> DiagnoseOneModul(short modul)
         {
             string message;
             try
             {
-
-            Settings.OneModulTest(modul);
-            message = Respond.OK.ToString();
+                Thread OneModulDIagThread = new Thread(() => Settings.OneModulTest(modul));
+                OneModulDIagThread.Start();
+                message = Respond.OK.ToString();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 message = ex.ToString();
             }
@@ -101,6 +100,23 @@ namespace ISStorehouseService
             return message;
         }
 
+        public async Task<string> ClearSingleCell(string address)
+        {
+            string message;
+
+            try
+            {
+                Info.ClearCell(address);
+                message = Respond.OK.ToString();
+
+            }
+            catch (Exception ex)
+            {
+                message = Respond.Bad_Request + " " + ex.ToString();
+            }
+            return message;
+        }
+
         public async Task<string> SendListCells(string address)
         {
             string message;
@@ -117,12 +133,17 @@ namespace ISStorehouseService
             return message;
         }
 
-        public async Task SingleCellInfo(int modul)
+        public async Task<string> ClearListCells()
         {
             throw new NotImplementedException();
         }
 
-        public async Task CellListInfo()
+        public async Task<string> SingleCellInfo(string address)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<string> CellListInfo()
         {
             throw new NotImplementedException();
         }

@@ -37,11 +37,19 @@ namespace ISStorehouseService
 
         [OperationContract]
         [WebGet]
-        Task SingleCellInfo(int modul);
+        Task<string> ClearSingleCell(string address);
 
         [OperationContract]
         [WebGet]
-        Task CellListInfo();
+        Task<string> ClearListCells();
+
+        [OperationContract]
+        [WebGet]
+        Task<string> SingleCellInfo(string address);
+
+        [OperationContract]
+        [WebGet]
+        Task<string> CellListInfo();
 
     }
 }

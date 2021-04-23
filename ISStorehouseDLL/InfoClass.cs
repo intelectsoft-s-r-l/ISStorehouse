@@ -1,4 +1,5 @@
-﻿using ISStorehouseDLL.Models;
+﻿using ISStorehouseDLL.Common;
+using ISStorehouseDLL.Models;
 using Realms;
 using System;
 using System.Linq;
@@ -8,6 +9,7 @@ namespace ISStorehouseDLL
 {
     public class InfoClass
     {
+        private Settings Settings = new Settings();
         public async Task SendToCell(string physicAddress, byte color0, byte color2, byte effect)
         {
             var realm = await Realm.GetInstanceAsync();
@@ -19,6 +21,23 @@ namespace ISStorehouseDLL
                 address.Color1 = color0;
                 address.Color2 = color2;
                 address.Effect = effect;
+                address.Modify = true;
+            });
+
+            realm.Dispose();
+        }
+        
+        public async Task ClearCell(string physicAddress)
+        {
+            var realm = await Realm.GetInstanceAsync();
+            var address = realm.All<Storehouse>().FirstOrDefault(
+                x => x.PhysicAddress == physicAddress);
+
+            realm.Write(() =>
+            {
+                address.Color1 = Convert.ToByte(Settings.Colors.Black);
+                address.Color2 = Convert.ToByte(Settings.Colors.Black);
+                address.Effect = Convert.ToByte(Settings.Effects.NoEffect);
                 address.Modify = true;
             });
 
