@@ -33,7 +33,7 @@ namespace ISStorehouseService
 
         [OperationContract]
         [WebGet]
-        Task<string> SendListCells(string address);
+        Task<string> SendListCells(object addresses);
 
         [OperationContract]
         [WebGet]
@@ -41,7 +41,7 @@ namespace ISStorehouseService
 
         [OperationContract]
         [WebGet]
-        Task<string> ClearListCells();
+        Task<string> ClearListCells(object addresses);
 
         [OperationContract]
         [WebGet]
@@ -49,7 +49,7 @@ namespace ISStorehouseService
 
         [OperationContract]
         [WebGet]
-        Task<string> CellListInfo();
+        Task<string> CellListInfo(object addresses);
 
     }
 }

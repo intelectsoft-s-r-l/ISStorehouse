@@ -39,7 +39,7 @@ namespace ISStorehouseDLL.Common
             Yellow,         // 4
             Aqua,           // 5
             Magenda,        // 6
-            White           // 6
+            White           // 7
         }
 
         public enum Respond

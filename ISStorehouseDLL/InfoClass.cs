@@ -16,34 +16,48 @@ namespace ISStorehouseDLL
             var address = realm.All<Storehouse>().FirstOrDefault(
                 x => x.PhysicAddress == physicAddress);
 
-            realm.Write(() =>
+            try
             {
-                address.Color1 = color0;
-                address.Color2 = color2;
-                address.Effect = effect;
-                address.Modify = true;
-            });
+                realm.Write(() =>
+                {
+                    address.Color1 = color0;
+                    address.Color2 = color2;
+                    address.Effect = effect;
+                    address.Modify = true;
+                });     
+            }
+            catch (Exception ex)
+            {
+
+            }
 
             realm.Dispose();
         }
-        
+
         public async Task ClearCell(string physicAddress)
         {
             var realm = await Realm.GetInstanceAsync();
             var address = realm.All<Storehouse>().FirstOrDefault(
                 x => x.PhysicAddress == physicAddress);
-
-            realm.Write(() =>
+            try
             {
-                address.Color1 = Convert.ToByte(Settings.Colors.Black);
-                address.Color2 = Convert.ToByte(Settings.Colors.Black);
-                address.Effect = Convert.ToByte(Settings.Effects.NoEffect);
-                address.Modify = true;
-            });
+                realm.Write(() =>
+                {
+                    address.Color1 = Convert.ToByte(Settings.Colors.Black);
+                    address.Color2 = Convert.ToByte(Settings.Colors.Black);
+                    address.Effect = Convert.ToByte(Settings.Effects.NoEffect);
+                    address.Modify = true;
+                });
+            }
+            catch(Exception ex)
+            {
+
+            }
+
 
             realm.Dispose();
         }
-        
+
         public async void SendToCells(string physicAddress)
         {
             var realm = await Realm.GetInstanceAsync();
@@ -61,11 +75,11 @@ namespace ISStorehouseDLL
             realm.Dispose();
         }
 
-        public string GetCellInformation(int modul, int row, int collumn)
+        public string CellInfo(string address)
         {
             var realm = Realm.GetInstance();
             var Modul = realm.All<Storehouse>()
-                .FirstOrDefault(x => x.Module == modul && x.Row == row && x.Collumn == collumn);
+                .FirstOrDefault(x => x.Address == address);
             string Response;
 
             if (Modul != null)
@@ -82,15 +96,10 @@ namespace ISStorehouseDLL
             realm.Dispose();
         }
 
-        public void CellInfo()
-        {
-            throw new NotImplementedException();
-        }
-
         /// <summary>
         /// Get information about a list of cells from database
         /// </summary>
-        public void CellListInfo()
+        public void CellListInfo(object address)
         {
             throw new NotImplementedException();
         }

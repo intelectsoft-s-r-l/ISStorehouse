@@ -117,30 +117,28 @@ namespace ISStorehouseAdmin
         private void SendSingleBtn_Click(object sender, EventArgs e)
         {
             info.SendToCell(this.PhysAddressTxt.Text, Convert.ToByte(this.Color0SendSingleCmb.SelectedItem), Convert.ToByte(this.Color2SendSingleCmb.SelectedItem), Convert.ToByte(this.EffectSendSingleCmb.SelectedItem));
-
-
         }
 
         private void ScanCellInfoBtn_Click(object sender, EventArgs e)
         {
-            var message = info.GetCellInformation(Convert.ToInt32(this.ModulCellInfoCmb.Text), Convert.ToInt32(this.RowCellInfoCmb.Text), Convert.ToInt32(this.CellCellInfoCmb.Text));
+            var message = info.CellInfo(PhysAddresesList.SelectedItems.ToString());
 
             MessageBox.Show(message, "Scan");
         }
 
         private void SendMultipleBtn_Click(object sender, EventArgs e)
         {
-            info.SendToCells(this.PhysAddresesList.SelectedItems.ToString());
+            info.SendToCells(PhysAddresesList.SelectedItems.ToString());
         }
 
         private void SendSingleGroup_Enter(object sender, EventArgs e)
         {
-
+            throw new NotImplementedException();
         }
 
         private void SendTab_Click(object sender, EventArgs e)
         {
-
+            throw new NotImplementedException();
         }
     }
 }

@@ -2,6 +2,8 @@
 using ISStorehouseDLL.Common;
 using ISStorehouseService.Responsed;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.ServiceModel;
 using System.Threading;
 using System.Threading.Tasks;
@@ -16,7 +18,6 @@ namespace ISStorehouseService
         private InfoClass Info = new InfoClass();
         private ScanClass Scan = new ScanClass();
 
-        //TODO: VERIFY async of diagnose
         public async Task<string> DiagnoseAllStorehouse()
         {
             string message;
@@ -32,7 +33,7 @@ namespace ISStorehouseService
             }
             return message;
         }
-        //TODO: VERIFY async of diagnose
+
         public async Task<string> DiagnoseOneModul(short modul)
         {
             string message;
@@ -117,12 +118,18 @@ namespace ISStorehouseService
             return message;
         }
 
-        public async Task<string> SendListCells(string address)
+        public async Task<string> SendListCells(object addresses)
         {
             string message;
+            List<string> result = addresses.ToString().Trim(' ').Split(',').ToList();
             try
             {
-                Info.SendToCells(address);
+                Random rnd = new Random();
+                foreach (var element in result)
+                {
+                    int color = rnd.Next(1, 8);
+                    Info.SendToCell(element.ToString(), Convert.ToByte(color), Convert.ToByte(0), 2);
+                }
                 message = Respond.OK.ToString();
             }
             catch (Exception ex)
@@ -133,52 +140,57 @@ namespace ISStorehouseService
             return message;
         }
 
-        public async Task<string> ClearListCells()
+        public async Task<string> ClearListCells(object addresses)
         {
-            throw new NotImplementedException();
+            string message;
+            List<string> result = addresses.ToString().Trim(' ').Split(',').ToList();
+            try
+            {
+                foreach (var element in result)
+                {
+                    Info.ClearCell(element);
+                }
+                message = Respond.OK.ToString();
+            }
+            catch (Exception ex)
+            {
+                message = Respond.Bad_Request + " " + ex.ToString();
+            }
+
+            return message;
         }
 
         public async Task<string> SingleCellInfo(string address)
         {
-            throw new NotImplementedException();
+            string message;
+            try
+            {
+                message = Info.CellInfo(address);
+            }
+            catch (Exception ex)
+            {
+                message = Respond.Bad_Request + " " + ex.ToString();
+            }
+            return message;
         }
 
-        public async Task<string> CellListInfo()
+        public async Task<string> CellListInfo(object addresses)
         {
-            throw new NotImplementedException();
-        }
-
-        public enum Status
-        {
-            Disabled,    //0
-            Active,      //1
-            Diagnose     //2 
-        }
-
-        public enum BaseColors
-        {
-            Red = 1,
-            Green = 2,
-            Blue = 3,
-        }
-
-        public enum Colors
-        {
-            Black,          // 0
-            Red,            // 1
-            Green,          // 2
-            Blue,           // 3
-            Yellow,         // 4
-            Aqua,           // 5
-            Magenda,        // 6
-            White           // 6
-        }
-
-        public enum Effects
-        {
-            NoEffect,             // 0
-            Blink,                // 1
-            DoubleBlink,          // 2
+            string message;
+            List<string> result = addresses.ToString().Trim(' ').Split(',').ToList();
+            try
+            {
+                foreach (var element in result)
+                {
+                    message = Info.CellInfo(element);
+                }
+                message = Respond.OK.ToString();
+            }
+            catch (Exception ex)
+            {
+                message = Respond.Bad_Request + " " + ex.ToString();
+            }
+            return message;
         }
 
         public enum Respond
