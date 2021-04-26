@@ -1,5 +1,4 @@
 ﻿using ISStorehouseDLL.Models;
-using Newtonsoft.Json;
 using Realms;
 using System;
 using System.Collections.Generic;
@@ -16,6 +15,7 @@ namespace ISStorehouseDLL.Common
         private int ErrorCount;
         private short LastReadModuleID;
 
+        #region ENUMS
         public enum Status
         {
             Disabled,    //0
@@ -55,6 +55,8 @@ namespace ISStorehouseDLL.Common
             DoubleBlink,          // 2
         }
 
+        #endregion
+
         public void SavePort(string com)
         {
             var realm = Realm.GetInstance();
@@ -89,13 +91,12 @@ namespace ISStorehouseDLL.Common
         private void OpenPort()
         {
             var realm = Realm.GetInstance();
-            var COM = realm.All<Port>();
+            var COM = realm.All<Port>().FirstOrDefault().ComPort;
 
-            var Com = "COM5";
             var Baud = "9600";
             try
             {
-                modbus.Open(Com, Convert.ToInt32(Baud), 8, System.IO.Ports.Parity.None, System.IO.Ports.StopBits.One);
+                modbus.Open(COM, Convert.ToInt32(Baud), 8, System.IO.Ports.Parity.None, System.IO.Ports.StopBits.One);
 
             }
             catch (Exception ex)
@@ -105,69 +106,85 @@ namespace ISStorehouseDLL.Common
 
             realm.Dispose();
         }
-        private void ClosePort()
-        {
-            modbus.Close();
-        }
 
-        //TODO: CRITICAL!!!!!!!!!  AllModulsDiagnose need fix, or StoreHouse Will DIE!!!!!!!!
         public string AllModulsDiagnose()
         {
             var realm = Realm.GetInstance();
-            var Deposit = realm.All<Moduls>();
+
             short[] Errors;
             var ignoreModul = realm.All<Moduls>().FirstOrDefault(
                 x => x.Status == 0);
 
+            var Modul = realm.All<Moduls>().Where(
+                x => x.Status != 0);
+
+
+            foreach (var mod in Modul)
+            {
+                realm.Write(() =>
+                {
+                    mod.Status = Convert.ToInt32(Status.Diagnose);
+                });
+            }
+
             if (ignoreModul != null)
             {
-                foreach (BaseColors colors in (BaseColors[])Enum.GetValues(typeof(BaseColors)))
+                var storehouses = realm.All<Moduls>();
+                foreach (var store in storehouses)
                 {
-                    foreach (var deposit in Deposit)
+                    foreach (BaseColors colors in (BaseColors[])Enum.GetValues(typeof(BaseColors)))
                     {
-                        if (deposit.Module != ignoreModul.Module)
+                        if (store.Module != ignoreModul.Module)
                         {
-                            for (int j = 0; j <= deposit.Collumns; j++)
+                            for (int i = 0; i <= store.Collumns; i++)
                             {
-                                for (int i = 0; i <= deposit.Rows; i++)
+                                for (int j = 0; j <= store.Rows; j++)
                                 {
                                     try
                                     {
-                                        var Storehouse = realm.All<Storehouse>().FirstOrDefault(
-
-                                            x => x.Module == deposit.Module && x.Collumn == j && x.Row == i);
-
+                                        var diags = realm.All<Storehouse>().FirstOrDefault(
+                                            x => x.Module == store.Module && x.Collumn == i && x.Row == j);
                                         realm.Write(() =>
                                         {
-                                            Storehouse.Color1 = Convert.ToByte(colors);
-                                            Storehouse.Color2 = Convert.ToByte(Colors.Black);
-                                            Storehouse.Effect = Convert.ToByte(Effects.NoEffect);
-                                            Storehouse.Modify = true;
+                                            diags.Color1 = Convert.ToByte(colors);
+                                            diags.Color2 = Convert.ToByte(Colors.Black);
+                                            diags.Effect = Convert.ToByte(Effects.NoEffect);
+                                            diags.Modify = true;
                                         });
+                                        Thread.Sleep(200);
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        string message = ex.ToString();
+                                    }
 
-                                        Thread.Sleep(2000);
+                                }
+                                Thread.Sleep(200);
 
+                                for (int j = 0; j <= store.Rows; j++)
+                                {
+                                    try
+                                    {
+                                        var diags = realm.All<Storehouse>().FirstOrDefault(
+                                            x => x.Module == store.Module && x.Collumn == i && x.Row == j);
                                         realm.Write(() =>
                                         {
-                                            Storehouse.Color1 = Convert.ToByte(Colors.Black);
-                                            Storehouse.Color2 = Convert.ToByte(Colors.Black);
-                                            Storehouse.Effect = Convert.ToByte(Effects.NoEffect);
-                                            Storehouse.Modify = true;
+                                            diags.Color1 = Convert.ToByte(Colors.Black);
+                                            diags.Color2 = Convert.ToByte(Colors.Black);
+                                            diags.Effect = Convert.ToByte(Effects.NoEffect);
+                                            diags.Modify = true;
                                         });
                                     }
                                     catch (Exception ex)
                                     {
-                                        var exception = ex;
+                                        string message = ex.ToString();
                                     }
 
                                 }
                             }
                         }
-
                     }
                 }
-
-                Thread.Sleep(5000);
 
                 var moduls = realm.All<Storehouse>();
                 foreach (var modul in moduls)
@@ -184,6 +201,15 @@ namespace ISStorehouseDLL.Common
             else
             {
                 var storehouses = realm.All<Moduls>();
+
+                foreach (var mod in Modul)
+                {
+                    realm.Write(() =>
+                    {
+                        mod.Status = Convert.ToInt32(Status.Diagnose);
+                    });
+                }
+
                 foreach (var store in storehouses)
                 {
                     foreach (BaseColors colors in (BaseColors[])Enum.GetValues(typeof(BaseColors)))
@@ -241,32 +267,6 @@ namespace ISStorehouseDLL.Common
                 Thread.Sleep(3000);
 
                 var moduls = realm.All<Storehouse>();
-
-                //foreach (var deposit in Deposit)
-                //{
-                //    for (int i = 0; i <= deposit.Rows; i++)
-                //    {
-                //        for (int j = 0; j <= deposit.Collumns; j++)
-                //        {
-                //            try
-                //            {
-                //                modbus.WriteSingle(Convert.ToInt32(deposit.Module),
-                //                Convert.ToInt16(i),
-                //                Convert.ToUInt16(deposit.Collumns),
-                //                Convert.ToInt16(j),
-                //                Convert.ToByte(Effects.NoEffect),
-                //                Convert.ToByte(Colors.Black),
-                //                Convert.ToByte(Colors.Black));
-
-                //            }
-                //            catch (Exception ex)
-                //            {
-                //                var message = ex;
-                //            }
-
-                //        }
-                //    }
-                //}
 
                 foreach (var modul in moduls)
                 {

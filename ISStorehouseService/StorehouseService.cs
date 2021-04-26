@@ -160,9 +160,9 @@ namespace ISStorehouseService
             return message;
         }
 
-        public async Task<string> SingleCellInfo(string address)
+        public async Task<object> SingleCellInfo(string address)
         {
-            string message;
+            object message;
             try
             {
                 message = Info.CellInfo(address);
@@ -171,26 +171,27 @@ namespace ISStorehouseService
             {
                 message = Respond.Bad_Request + " " + ex.ToString();
             }
-            return message;
+            return message.ToString();
         }
 
-        public async Task<string> CellListInfo(object addresses)
+        public async Task<List<string>> CellListInfo(object addresses)
         {
-            string message;
+            object message;
+            List<string> mess = new List<string>();
             List<string> result = addresses.ToString().Trim(' ').Split(',').ToList();
             try
             {
                 foreach (var element in result)
                 {
-                    message = Info.CellInfo(element);
+                    mess.Add(Info.CellInfo(element).ToString());
                 }
-                message = Respond.OK.ToString();
             }
             catch (Exception ex)
             {
-                message = Respond.Bad_Request + " " + ex.ToString();
+                mess.Add(Respond.Bad_Request + " " + ex.ToString());
             }
-            return message;
+
+            return mess;
         }
 
         public enum Respond

@@ -24,7 +24,7 @@ namespace ISStorehouseDLL
                     address.Color2 = color2;
                     address.Effect = effect;
                     address.Modify = true;
-                });     
+                });
             }
             catch (Exception ex)
             {
@@ -49,7 +49,7 @@ namespace ISStorehouseDLL
                     address.Modify = true;
                 });
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
 
             }
@@ -75,20 +75,28 @@ namespace ISStorehouseDLL
             realm.Dispose();
         }
 
-        public string CellInfo(string address)
+        public object CellInfo(string address)
         {
             var realm = Realm.GetInstance();
             var Modul = realm.All<Storehouse>()
-                .FirstOrDefault(x => x.Address == address);
-            string Response;
+                .FirstOrDefault(x => x.PhysicAddress == address);
+            object Response;
+
 
             if (Modul != null)
             {
-                Response = "Cell has color " + Modul.Color1 + " and another color " + Modul.Color2 + " with efect " + Modul.Effect;
+                if (Modul.Color1 == 0 && Modul.Color1 == 0)
+                {
+                    Response = "Address " + Modul.PhysicAddress + " is clear.";
+                }
+                else
+                {
+                    Response = "Address " + Modul.PhysicAddress + " has colors " + Modul.Color1 + " and " + Modul.Color2 + ", with effect " + Modul.Effect;
+                }
             }
             else
             {
-                Response = "Cell is empty";
+                Response = null;
             }
 
 
@@ -96,13 +104,6 @@ namespace ISStorehouseDLL
             realm.Dispose();
         }
 
-        /// <summary>
-        /// Get information about a list of cells from database
-        /// </summary>
-        public void CellListInfo(object address)
-        {
-            throw new NotImplementedException();
-        }
 
         /// <summary>
         /// verify if modul is busy

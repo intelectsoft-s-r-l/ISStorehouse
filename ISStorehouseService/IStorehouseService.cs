@@ -45,11 +45,11 @@ namespace ISStorehouseService
 
         [OperationContract]
         [WebGet]
-        Task<string> SingleCellInfo(string address);
+        Task<object> SingleCellInfo(string address);
 
         [OperationContract]
         [WebGet]
-        Task<string> CellListInfo(object addresses);
+        Task<List<string>> CellListInfo(object addresses);
 
     }
 }
