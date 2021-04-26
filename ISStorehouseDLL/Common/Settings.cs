@@ -286,13 +286,18 @@ namespace ISStorehouseDLL.Common
             return Message;
         }
 
-        public async Task OneModulTest(short modul)
+        public string OneModulTest(short modul)
         {
-            var realm = await Realm.GetInstanceAsync();
+            var realm = Realm.GetInstance();
             var ModuleId = modul;
 
             var Deposit = realm.All<Moduls>().FirstOrDefault(
                 x => x.Module == modul);
+
+            realm.Write(() =>
+            {
+                Deposit.Status = Convert.ToInt32(Status.Diagnose);
+            });
 
             foreach (BaseColors colors in (BaseColors[])Enum.GetValues(typeof(BaseColors)))
             {
@@ -308,6 +313,7 @@ namespace ISStorehouseDLL.Common
 
                             realm.Write(() =>
                             {
+                                Deposit.Status = Convert.ToInt32(Status.Diagnose);
                                 Storehouse.Color1 = Convert.ToByte(colors);
                                 Storehouse.Color2 = Convert.ToByte(Colors.Black);
                                 Storehouse.Effect = Convert.ToByte(Effects.NoEffect);
@@ -385,7 +391,10 @@ namespace ISStorehouseDLL.Common
                 });
             }
 
+            DiagnoseModul(modul);
             realm.Dispose();
+            string Message = "Diagnose ended";
+            return Message;
         }
 
         public void CheckDataBase()
@@ -430,6 +439,52 @@ namespace ISStorehouseDLL.Common
                 }
             }
             while (true);
+        }
+
+        public void DiagnoseModul(short modul)
+        {
+            //TODO: Add Closeport and retry
+            var realm = Realm.GetInstance();
+            var ErrorsTable = realm.All<Errors>().Where(x => x.Module == modul);
+
+            short[] Row;
+
+                Row = modbus.PollFunction(modul, 0, 10);
+
+                //var AllModuls = realm.All<Moduls>().FirstOrDefault(
+                //    x => x.Module == Error.Module);
+
+                //if (Row != null)
+                //{
+                //    realm.Write(() =>
+                //    {
+                //        Error.OverflowErrCount = Convert.ToInt16(Row[4]);
+                //        Error.IlegalDataValueCount = Convert.ToInt16(Row[5]);
+                //        Error.IlegalDataAddressCount = Convert.ToInt16(Row[6]);
+                //        Error.IlegatFunctionCount = Convert.ToInt16(Row[7]);
+                //        Error.CheckSumErrCount = Convert.ToInt16(Row[8]);
+                //        Error.TotoalErr = Convert.ToInt16(Row[9]);
+                //    });
+
+                //    if (Row[0] != AllModuls.Module || Error.OverflowErrCount != 0 || Error.IlegalDataValueCount != 0 || Error.IlegalDataAddressCount != 0 || Error.IlegatFunctionCount != 0 || Error.CheckSumErrCount != 0)
+                //    {
+                //        realm.Write(() =>
+                //        {
+                //            AllModuls.Status = Convert.ToInt32(Status.Disabled);
+                //        });
+                //    }
+                //    else
+                //    {
+                //        realm.Write(() =>
+                //        {
+                //            AllModuls.Status = Convert.ToInt32(Status.Active);
+                //        });
+                //    }
+            //    }
+
+            //}
+
+            realm.Dispose();
         }
 
         public void Diagnosis()
