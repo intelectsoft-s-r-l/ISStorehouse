@@ -1,6 +1,5 @@
 ﻿using ISStorehouseDLL;
 using ISStorehouseDLL.Common;
-using ISStorehouseService.Responsed;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,30 +16,15 @@ namespace ISStorehouseService
         private Settings Settings = new Settings();
         private InfoClass Info = new InfoClass();
         private ScanClass Scan = new ScanClass();
-
-        public async Task<string> DiagnoseAllStorehouse()
-        {
-            string message;
-            try
-            {
-                Thread AllModulsDiagThread = new Thread(() => Settings.AllModulsDiagnose());
-                AllModulsDiagThread.Start();
-                message = Respond.OK.ToString();
-            }
-            catch (Exception ex)
-            {
-                message = Respond.Bad_Request + " " + ex.ToString();
-            }
-            return message;
-        }
+        private CancellationTokenSource cts = new CancellationTokenSource();
 
         public async Task<string> DiagnoseOneModul(short modul)
         {
             string message;
             try
             {
-                Thread OneModulDIagThread = new Thread(() => Settings.OneModulTest(modul));
-                OneModulDIagThread.Start();
+                Thread Diagnose = new Thread(() => Settings.OneModulTest(modul));
+                Diagnose.Start();
                 message = Respond.OK.ToString();
             }
             catch (Exception ex)
@@ -51,8 +35,26 @@ namespace ISStorehouseService
             return message;
         }
 
+        public async Task<string> DiagnoseAllStorehouse()
+        {
+            string message;
+            try
+            {
+                Thread Diagnose = new Thread(() => Settings.AllModulsDiagnose());
+                Diagnose.Start();
+                message = Respond.OK.ToString();
+            }
+            catch (Exception ex)
+            {
+                message = Respond.Bad_Request + " " + ex.ToString();
+            }
+            return message;
+        }
+
         public async Task<string> ClearAllStorehouse()
         {
+            CancellationToken token = new CancellationToken();
+
             string message;
             try
             {
@@ -89,9 +91,7 @@ namespace ISStorehouseService
             string message;
             try
             {
-                Info.SendToCell(address, color1, color2, effect);
-                message = Respond.OK.ToString();
-
+                message = Info.SendToCell(address, color1, color2, effect).Result;
 
             }
             catch (Exception ex)
@@ -107,8 +107,7 @@ namespace ISStorehouseService
 
             try
             {
-                Info.ClearCell(address);
-                message = Respond.OK.ToString();
+                message = Info.ClearCell(address).Result;
 
             }
             catch (Exception ex)
@@ -192,6 +191,13 @@ namespace ISStorehouseService
             }
 
             return mess;
+        }
+
+        //TODO:  cancel functions
+        public async Task<string> CloseFunction()
+        {
+            cts.Cancel();
+            return "Canceled";
         }
 
         public enum Respond

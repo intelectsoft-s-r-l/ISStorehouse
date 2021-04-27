@@ -4,75 +4,114 @@ using Realms;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using static ISStorehouseDLL.Common.Settings;
 
 namespace ISStorehouseDLL
 {
     public class InfoClass
     {
         private Settings Settings = new Settings();
-        public async Task SendToCell(string physicAddress, byte color0, byte color2, byte effect)
+        public async Task<string> SendToCell(string physicAddress, byte color0, byte color2, byte effect)
         {
             var realm = await Realm.GetInstanceAsync();
             var address = realm.All<Storehouse>().FirstOrDefault(
                 x => x.PhysicAddress == physicAddress);
+            var status = realm.All<Moduls>().FirstOrDefault(
+                x => x.Module == address.Module && x.Status == Convert.ToInt32(Status.Diagnose));
+            string message;
 
-            try
+            if (status != null)
             {
-                realm.Write(() =>
+                return message = "Modul is in diagnose";
+            }
+            else
+            {
+                try
                 {
-                    address.Color1 = color0;
-                    address.Color2 = color2;
-                    address.Effect = effect;
-                    address.Modify = true;
-                });
+                    realm.Write(() =>
+                    {
+                        address.Color1 = color0;
+                        address.Color2 = color2;
+                        address.Effect = effect;
+                        address.Modify = true;
+                    });
+
+                    message = Respond.OK.ToString();
+                }
+                catch (Exception ex)
+                {
+                    message = Respond.Bad_Request + " " + ex.ToString();
+                }
             }
-            catch (Exception ex)
+
+            realm.Dispose();
+            return message;
+        }
+
+        public async Task<string> ClearCell(string physicAddress)
+        {
+            var realm = await Realm.GetInstanceAsync();
+            var address = realm.All<Storehouse>().FirstOrDefault(
+                x => x.PhysicAddress == physicAddress);
+            var status = realm.All<Moduls>().FirstOrDefault(
+                x => x.Module == address.Module && x.Status == Convert.ToInt32(Status.Diagnose));
+            string message;
+
+            if (status != null)
             {
-
+                return message = "Modul is in diagnose";
+            }
+            else
+            {
+                try
+                {
+                    message = Respond.OK.ToString();
+                    realm.Write(() =>
+                    {
+                        address.Color1 = Convert.ToByte(Settings.Colors.Black);
+                        address.Color2 = Convert.ToByte(Settings.Colors.Black);
+                        address.Effect = Convert.ToByte(Settings.Effects.NoEffect);
+                        address.Modify = true;
+                    });
+                }
+                catch (Exception ex)
+                {
+                    message = Respond.Bad_Request + " " + ex.ToString();
+                }
             }
 
+
+            return message;
             realm.Dispose();
         }
 
-        public async Task ClearCell(string physicAddress)
+        public async Task<string> SendToCells(string physicAddress)
         {
             var realm = await Realm.GetInstanceAsync();
             var address = realm.All<Storehouse>().FirstOrDefault(
                 x => x.PhysicAddress == physicAddress);
-            try
+            var status = realm.All<Moduls>().FirstOrDefault(
+               x => x.Module == address.Module && x.Status == Convert.ToInt32(Status.Diagnose));
+            string message;
+
+            if (status != null)
             {
-                realm.Write(() =>
+                return message = "Modul is in diagnose";
+            }
+            else
+            {
+                Random rnd = new Random();
+                foreach (object element in physicAddress)
                 {
-                    address.Color1 = Convert.ToByte(Settings.Colors.Black);
-                    address.Color2 = Convert.ToByte(Settings.Colors.Black);
-                    address.Effect = Convert.ToByte(Settings.Effects.NoEffect);
-                    address.Modify = true;
-                });
-            }
-            catch (Exception ex)
-            {
-
+                    int color = rnd.Next(1, 7);
+                    SendToCell(element.ToString(), Convert.ToByte(color), Convert.ToByte(0), 1);
+                }
+                message = Respond.OK.ToString();
             }
 
 
             realm.Dispose();
-        }
-
-        public async void SendToCells(string physicAddress)
-        {
-            var realm = await Realm.GetInstanceAsync();
-            var address = realm.All<Storehouse>().FirstOrDefault(
-                x => x.PhysicAddress == physicAddress);
-
-            Random rnd = new Random();
-            foreach (object element in physicAddress)
-            {
-                int color = rnd.Next(1, 7);
-                SendToCell(element.ToString(), Convert.ToByte(color), Convert.ToByte(0), 1);
-
-            }
-
-            realm.Dispose();
+            return message;
         }
 
         public object CellInfo(string address)
@@ -81,7 +120,6 @@ namespace ISStorehouseDLL
             var Modul = realm.All<Storehouse>()
                 .FirstOrDefault(x => x.PhysicAddress == address);
             object Response;
-
 
             if (Modul != null)
             {
@@ -99,9 +137,8 @@ namespace ISStorehouseDLL
                 Response = null;
             }
 
-
-            return Response;
             realm.Dispose();
+            return Response;
         }
 
 

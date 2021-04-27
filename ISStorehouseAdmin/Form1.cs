@@ -56,7 +56,7 @@ namespace ISStorehouseAdmin
         private void DiagnoseBtn_Click(object sender, EventArgs e)
         {
             var message = settings.AllModulsDiagnose();
-            MessageBox.Show(message, "Diagnose");
+            //MessageBox.Show(message, "Diagnose");
         }
 
         private void ClearAllBtn_Click(object sender, EventArgs e)

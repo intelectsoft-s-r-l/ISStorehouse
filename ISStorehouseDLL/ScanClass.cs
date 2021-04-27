@@ -34,28 +34,43 @@ namespace ISStorehouseDLL
             realm.Dispose();
             return "All moduls are cleard";
         }
-        public void ClearOneModul(int modul)
+        public string ClearOneModul(int modul)
         {
             var realm = Realm.GetInstance();
             var Modul = realm.All<Moduls>().FirstOrDefault(x => x.Module == modul);
             var deposit = realm.All<Storehouse>();
+            var address = realm.All<Storehouse>().FirstOrDefault(
+                x => x.Module == Modul.Module);
+            var status = realm.All<Moduls>().FirstOrDefault(
+                x => x.Module == address.Module && x.Status == Convert.ToInt32(Status.Diagnose));
+            string message;
 
-            foreach (var depo in deposit)
+            if (status != null)
             {
-                if (depo.Module == Modul.Module)
-                {
-                    realm.Write(() =>
-                    {
-                        depo.Color1 = Convert.ToByte(Colors.Black);
-                        depo.Color2 = Convert.ToByte(Colors.Black);
-                        depo.Effect = Convert.ToByte(Effects.NoEffect);
-                        depo.Modify = true;
-                    });
-                }
+                return message = "Modul is in diagnose";
+            }
+            else
+            {
 
+                foreach (var depo in deposit)
+                {
+                    if (depo.Module == Modul.Module)
+                    {
+                        realm.Write(() =>
+                        {
+                            depo.Color1 = Convert.ToByte(Colors.Black);
+                            depo.Color2 = Convert.ToByte(Colors.Black);
+                            depo.Effect = Convert.ToByte(Effects.NoEffect);
+                            depo.Modify = true;
+                        });
+                    }
+
+                }
+                message = Respond.OK.ToString();
             }
 
             realm.Dispose();
+            return message;
         }
 
         public void GenerateAddreses()

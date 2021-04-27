@@ -50,6 +50,10 @@ namespace ISStorehouseService
         [OperationContract]
         [WebGet]
         Task<List<string>> CellListInfo(object addresses);
+        
+        [OperationContract]
+        [WebGet]
+        Task<string> CloseFunction();
 
     }
 }
