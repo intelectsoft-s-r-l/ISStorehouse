@@ -16,14 +16,17 @@ namespace ISStorehouseService
         private Settings Settings = new Settings();
         private InfoClass Info = new InfoClass();
         private ScanClass Scan = new ScanClass();
-        private CancellationTokenSource cts = new CancellationTokenSource();
+        private CancellationTokenSource _tokenSource;
 
         public async Task<string> DiagnoseOneModul(short modul)
         {
+            _tokenSource = new CancellationTokenSource();
+            var token = _tokenSource.Token;
+
             string message;
             try
             {
-                Thread Diagnose = new Thread(() => Settings.OneModulTest(modul));
+                Thread Diagnose = new Thread(() => Settings.OneModulTest(modul, token));
                 Diagnose.Start();
                 message = Respond.OK.ToString();
             }
@@ -31,16 +34,23 @@ namespace ISStorehouseService
             {
                 message = ex.ToString();
             }
+            finally
+            {
+                _tokenSource.Dispose();
+            }
 
             return message;
         }
 
         public async Task<string> DiagnoseAllStorehouse()
         {
+            _tokenSource = new CancellationTokenSource();
+            var token = _tokenSource.Token;
+
             string message;
             try
             {
-                Thread Diagnose = new Thread(() => Settings.AllModulsDiagnose());
+                Thread Diagnose = new Thread(() => Settings.AllModulsDiagnose(token));
                 Diagnose.Start();
                 message = Respond.OK.ToString();
             }
@@ -48,13 +58,15 @@ namespace ISStorehouseService
             {
                 message = Respond.Bad_Request + " " + ex.ToString();
             }
+            finally
+            {
+                _tokenSource.Dispose();
+            }
             return message;
         }
 
         public async Task<string> ClearAllStorehouse()
         {
-            CancellationToken token = new CancellationToken();
-
             string message;
             try
             {
@@ -98,6 +110,7 @@ namespace ISStorehouseService
             {
                 message = Respond.Bad_Request + " " + ex.ToString();
             }
+
             return message;
         }
 
@@ -193,10 +206,11 @@ namespace ISStorehouseService
             return mess;
         }
 
-        //TODO:  cancel functions
         public async Task<string> CloseFunction()
         {
-            cts.Cancel();
+            var token = _tokenSource.Token;
+            _tokenSource.Cancel();
+            Settings.Cancel(token);
             return "Canceled";
         }
 
