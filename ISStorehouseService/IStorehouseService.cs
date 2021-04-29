@@ -53,7 +53,7 @@ namespace ISStorehouseService
         
         [OperationContract]
         [WebGet]
-        Task<string> CloseFunction();
+        Task<string> CancelDiagnose();
 
     }
 }

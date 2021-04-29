@@ -34,10 +34,6 @@ namespace ISStorehouseService
             {
                 message = ex.ToString();
             }
-            finally
-            {
-                _tokenSource.Dispose();
-            }
 
             return message;
         }
@@ -57,10 +53,6 @@ namespace ISStorehouseService
             catch (Exception ex)
             {
                 message = Respond.Bad_Request + " " + ex.ToString();
-            }
-            finally
-            {
-                _tokenSource.Dispose();
             }
             return message;
         }
@@ -206,7 +198,7 @@ namespace ISStorehouseService
             return mess;
         }
 
-        public async Task<string> CloseFunction()
+        public async Task<string> CancelDiagnose()
         {
             var token = _tokenSource.Token;
             _tokenSource.Cancel();
