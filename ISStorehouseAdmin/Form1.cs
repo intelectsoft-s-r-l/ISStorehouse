@@ -17,7 +17,7 @@ namespace ISStorehouseAdmin
         private Settings settings = new Settings();
         private ScanClass scan = new ScanClass();
         private InfoClass info = new InfoClass();
-        private CancellationTokenSource _tokenSource = new CancellationTokenSource();
+        private CancellationTokenSource _tokenSource;
 
         public Form1()
         {
@@ -54,8 +54,10 @@ namespace ISStorehouseAdmin
             settings.SavePort(this.PortCmb.Text);
         }
 
-        private void DiagnoseBtn_Click(object sender, EventArgs e, CancellationToken token)
+        private void DiagnoseBtn_Click(object sender, EventArgs e)
         {
+            _tokenSource = new CancellationTokenSource();
+            var token = _tokenSource.Token;
             var message = settings.AllModulsDiagnose(token);
             //MessageBox.Show(message, "Diagnose");
         }
@@ -65,8 +67,10 @@ namespace ISStorehouseAdmin
             scan.ClearAllModuls();
         }
 
-        private void DiagnoseModulBtn_Click(object sender, EventArgs e, CancellationToken token)
+        private void DiagnoseModulBtn_Click(object sender, EventArgs e)
         {
+            _tokenSource = new CancellationTokenSource();
+            var token = _tokenSource.Token;
             settings.OneModulTest(Convert.ToInt16(this.ModulCmb.Text), token);
         }
 

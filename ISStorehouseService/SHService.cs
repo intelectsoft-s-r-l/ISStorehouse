@@ -1,9 +1,6 @@
-﻿using ISStorehouseDLL;
-using ISStorehouseDLL.Common;
+﻿using ISStorehouseDLL.Common;
 using System;
-using System.ComponentModel;
 using System.Configuration;
-using System.Configuration.Install;
 using System.Diagnostics;
 using System.ServiceModel;
 using System.ServiceModel.Description;

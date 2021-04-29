@@ -1,7 +1,7 @@
 ﻿using ISStorehouseDLL.Models;
+using NLog;
 using Realms;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -10,9 +10,10 @@ namespace ISStorehouseDLL.Common
 {
     public class Settings
     {
-        private Modbus modbus = new Modbus();
-        private ScanClass scan = new ScanClass();
+        private Modbus _modbus = new Modbus();
+        private ScanClass _scan = new ScanClass();
         private CancellationTokenSource _tokenSource = new CancellationTokenSource();
+        protected Logger _logger = LogManager.GetCurrentClassLogger();
         private int ErrorCount;
         private short LastReadModuleID;
 
@@ -97,7 +98,7 @@ namespace ISStorehouseDLL.Common
             var Baud = "9600";
             try
             {
-                modbus.Open(COM, Convert.ToInt32(Baud), 8, System.IO.Ports.Parity.None, System.IO.Ports.StopBits.One);
+                _modbus.Open(COM, Convert.ToInt32(Baud), 8, System.IO.Ports.Parity.None, System.IO.Ports.StopBits.One);
 
             }
             catch (Exception ex)
@@ -161,7 +162,7 @@ namespace ISStorehouseDLL.Common
                                                 mod.Status = Convert.ToInt32(Status.Active);
                                             });
                                         }
-                                        scan.ClearOneModul(store.Module);
+                                        _scan.ClearOneModul(store.Module);
                                         return;
                                     }
                                     Thread.Sleep(200);
@@ -233,7 +234,7 @@ namespace ISStorehouseDLL.Common
                                             mod.Status = Convert.ToInt32(Status.Active);
                                         });
                                     }
-                                    scan.ClearOneModul(store.Module);
+                                    _scan.ClearOneModul(store.Module);
                                     return;
                                 }
                                 Thread.Sleep(200);
@@ -318,7 +319,7 @@ namespace ISStorehouseDLL.Common
                                 Deposit.Status = Convert.ToInt32(Status.Active);
                             });
 
-                            scan.ClearOneModul(modul);
+                            _scan.ClearOneModul(modul);
                             return;
                         }
                     }
@@ -399,7 +400,7 @@ namespace ISStorehouseDLL.Common
                     {
                         if (check.Modify)
                         {
-                            modbus.WriteSingle(
+                            _modbus.WriteSingle(
                                 Convert.ToInt32(check.Module),
                                 Convert.ToInt16(check.Row),
                                 Convert.ToUInt16(LedsPerRow.Collumns),
@@ -434,7 +435,7 @@ namespace ISStorehouseDLL.Common
 
             foreach (var Error in ErrorsTable)
             {
-                Row = modbus.PollFunction(Error.Module, 0, 10);
+                Row = _modbus.PollFunction(Error.Module, 0, 10);
 
                 var AllModuls = realm.All<Moduls>().FirstOrDefault(
                     x => x.Module == Error.Module);
@@ -516,7 +517,7 @@ namespace ISStorehouseDLL.Common
             {
                 try
                 {
-                    Row = modbus.PollFunction(i, 0, 10);
+                    Row = _modbus.PollFunction(i, 0, 10);
                     if (Row is object)
                     {
                         realm.Write(() =>
@@ -557,7 +558,7 @@ namespace ISStorehouseDLL.Common
             {
                 try
                 {
-                    Errors = modbus.PollFunction(Convert.ToInt32(moduls.Module), 0, 10);
+                    Errors = _modbus.PollFunction(Convert.ToInt32(moduls.Module), 0, 10);
 
                     var AllErrors = realm.All<Errors>().FirstOrDefault(
                         x => x.Module == Errors[0] &&
@@ -578,6 +579,8 @@ namespace ISStorehouseDLL.Common
                         moduls.Status = Convert.ToInt16(Status.Active);
                     });
 
+                    _logger.Info("Module " + Errors[0] + "OverflowErrCount" + Errors[4] + "IlegalDataValueCount" + Errors[5] + "IlegalDataAddressCount" + Errors[6] + "IlegatFunctionCount" + Errors[7] + "CheckSumErrCount" + Errors[8] + "TotoalErrCreated" + Errors[9]);
+
 
                     if (Errors[4] != 0 || Errors[5] != 0 || Errors[6] != 0 || Errors[7] != 0 || Errors[8] != 0)
                     {
@@ -596,7 +599,7 @@ namespace ISStorehouseDLL.Common
                 }
 
             }
-            scan.DisplayModules();
+            _scan.DisplayModules();
             realm.Dispose();
             Message = "Scan finished";
             return Message;
